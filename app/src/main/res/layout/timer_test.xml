@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+
+    <TextView android:id="@+id/timerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="60dp"
+        android:text="@string/timeStart"
+        android:layout_gravity="top|center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/btnStart"
+        android:layout_below="@+id/timerView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:background="#2196F3" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:insetLeft="10dp"
+        android:insetRight="10dp"
+        android:layout_marginTop="400dp"
+        android:background="@android:color/darker_gray"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Flag"
+        android:id="@+id/btnFlag"
+        android:layout_below="@+id/btnStart"
+        android:layout_alignStart="@+id/btnStart"
+        android:background="#EF5350"
+        android:layout_marginTop="15dp"
+        android:textColor="#ffffffff" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvCapture"
+        android:textSize="15dp"
+        android:text="Current Process"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/timerView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvIntervalCount"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/btnFlag"
+        android:layout_centerHorizontal="true"
+        android:textSize="15dp"
+        android:text="Interval Count" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvCurrentChild"
+        android:textSize="15dp"
+        android:text="Currently observing:"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="48dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:id="@+id/btnBack"
+        android:onClick="onClick_Back"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/tvCapture"
+        android:layout_alignStart="@+id/tvIntervalCount"
+        android:textColor="#2196F3" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Current status:"
+        android:id="@+id/tvStatus"
+        android:textSize="15dp"
+        android:layout_alignTop="@+id/tvCurrentChild"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/tvId"
+        android:layout_above="@+id/btnBack"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Session:"
+        android:id="@+id/tvSession"
+        android:textSize="15dp"
+        android:layout_above="@+id/tvCurrentChild"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tvPassChildName"
+        android:layout_below="@+id/btnBack"
+        android:layout_alignStart="@+id/btnBack"
+        android:layout_marginTop="40dp"
+        android:visibility="invisible" />
+
+</RelativeLayout>

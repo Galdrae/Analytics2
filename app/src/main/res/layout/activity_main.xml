@@ -1,0 +1,91 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:orientation="vertical"
+    android:layout_height="fill_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <EditText
+        android:id="@+id/tbName"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="50dp"/>
+
+    <EditText
+        android:id="@+id/tbAge"
+        android:layout_height="wrap_content"
+        android:hint="Age"
+        android:inputType="textPersonName"
+        android:layout_width="fill_parent"/>
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnCreate"
+        android:layout_alignEnd="@+id/rbFemale"
+        android:onClick="onClick_Delete"
+        android:text="Delete"
+        android:visibility="gone" />
+
+    <RadioButton
+        android:id="@+id/rbMale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/rbFemale"
+        android:layout_toEndOf="@+id/btnList"
+        android:onClick="onClick_rbMale"
+        android:text="Male" />
+
+    <RadioButton
+        android:id="@+id/rbFemale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tbAge"
+        android:layout_below="@+id/tbAge"
+        android:onClick="onClick_rbFemale"
+        android:text="Female" />
+
+    <Button
+        android:id="@+id/btnList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnView"
+        android:layout_alignStart="@+id/btnView"
+        android:onClick="onClick_List"
+        android:text="List"
+        android:background="#2196F3"
+        android:layout_marginTop="15dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btnView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/tvTabs"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClick_View"
+        android:text="View"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btnCreate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/rbFemale"
+        android:layout_below="@+id/btnList"
+        android:onClick="onClick_Create"
+        android:text="Enter"
+        android:background="@drawable/mybutton"
+        android:textColor="#ffffffff"
+        android:layout_marginTop="250dp" />
+
+</LinearLayout>
