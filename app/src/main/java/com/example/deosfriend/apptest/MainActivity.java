@@ -21,6 +21,7 @@ public class MainActivity extends ActionBarActivity {
     Button create, view;
     TextView tbName, tbAge;
     RadioButton male, female;
+
     DBAdapter myDB;
     SessionDBAdapter mySessionDB;
 

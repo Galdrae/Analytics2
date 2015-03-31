@@ -23,6 +23,8 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import Controller.Message;
+
 /**
  * Created by Deo's Friend on 3/15/2015.
  */
@@ -65,43 +67,35 @@ public class childDetails extends ActionBarActivity {
         // ===================================================
 
         // ================ Tabs ================
-/*        mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-        mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        mTabs.setViewPager(mPager);*/
 
-         final TabHost tabhost = (TabHost) findViewById(R.id.tabHost);
-
-/*        TabHost.TabSpec spec = tabhost.newTabSpec("Tab 1");
-        spec.setContent(new Intent(this, Timer_Test.class));
-        spec.setIndicator("Tab1 secondActivity");
-        tabhost.addTab(spec);
-
-        TabHost.TabSpec spec2 = tabhost.newTabSpec("Tab2");
-        spec2.setContent(new Intent(this, ListView_Database.class));
-        spec2.setIndicator("Tab2 thirdActivity");
-        tabhost.addTab(spec2);*/
-
+        final TabHost tabhost = (TabHost) findViewById(R.id.tabHost);
         tabhost.setup();
+
         TabHost.TabSpec tabSpec = tabhost.newTabSpec("details");
         tabSpec.setContent(R.id.childDetailTab);
         tabSpec.setIndicator("Details");
         tabhost.addTab(tabSpec);
 
-/*        tabSpec =  tabhost.newTabSpec("timer");
-        tabSpec.setContent(new Intent(this, Timer_Test.class));
-        tabSpec.setIndicator("Timer");
-        //tabSpec.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        TabHost.TabSpec tabSpec1 = tabhost.newTabSpec("details");
+        tabSpec1.setContent(new Intent(this,TabActivity.class));
+        tabSpec1.setIndicator("Details");
+        tabhost.addTab(tabSpec1);
+
+
+
+/*        tabhost.addTab(tabhost.newTabSpec("Timer")
+                .setIndicator("Timer")
+                .setContent(new Intent(this, Timer_Test.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));*/
+
+/*        tabSpec =  tabhost.newTabSpec("test");
+        tabSpec.setContent(R.id.timerTab);
+        tabSpec.setIndicator("Test");
         tabhost.addTab(tabSpec);*/
 
         tabSpec =  tabhost.newTabSpec("test");
-        tabSpec.setContent(R.id.timerTab);
-        tabSpec.setIndicator("Test");
-        tabhost.addTab(tabSpec);
-
-        tabSpec =  tabhost.newTabSpec("test");
         tabSpec.setContent(R.id.tab3);
-        tabSpec.setIndicator("Test");
+        tabSpec.setIndicator("Grade");
         tabhost.addTab(tabSpec);
         // ===================================================
 
@@ -173,7 +167,6 @@ public class childDetails extends ActionBarActivity {
                 RSQ11.setText(String.valueOf(rating));
             }
         });
-
         RSQ2.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 RSQ22.setText(String.valueOf(rating));
@@ -213,18 +206,12 @@ public class childDetails extends ActionBarActivity {
             if (errorMsg == "") {
 
                 long newID = gradeDB.insertRow(Childname2, Qns1_lbl, Qns2_lbl, Qns3_lbl, Qns4_lbl, Qns5_lbl);
-                Toast.makeText(childDetails.this, "Test: " + Childname2 + ", " + Qns1_lbl , Toast.LENGTH_LONG).show();
+                Toast.makeText(childDetails.this,  Childname2 + " grade submitted.", Toast.LENGTH_LONG).show();
                 Cursor cursor2 = gradeDB.getRow(newID);
                 displayRecordSet(cursor2);
             }
         }
     }
-
-    private void openGradeDB() {
-        gradeDB = new gradingDB(this);
-        gradeDB.open();
-    }
-
 
     // Retreive Database
     private void displayRecordSet(Cursor cursor2) {
@@ -252,19 +239,22 @@ public class childDetails extends ActionBarActivity {
                         + "\n";
             } while (cursor2.moveToNext());
         }
-
         cursor2.close();
+        Message.message(this, message);
     }
 
     public void OnClick_View(View v) {
-        Toast.makeText(childDetails.this, "View Button", Toast.LENGTH_LONG).show();
+       // Toast.makeText(childDetails.this, "View Button", Toast.LENGTH_LONG).show();
         Cursor cursor3 = gradeDB.getAllRows();
         displayRecordSet(cursor3);
     }
 
-        // ============ End of ginger code =================
+    private void openGradeDB() {
+        gradeDB = new gradingDB(this);
+        gradeDB.open();
+    }
 
-
+    // ============ End of ginger code =================
 
     protected void onDestroy() {
         super.onDestroy();

@@ -31,9 +31,9 @@ public class gradingDB{
 
     // DB info: it's name, and the table we are using (just one).
     public static final String DATABASE_NAME = "gradingDb";
-    public static final String DATABASE_TABLE = "grading";
+    public static final String DATABASE_TABLE = "GradingTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_CREATE_SQL =
             "create table " + DATABASE_TABLE
@@ -49,7 +49,7 @@ public class gradingDB{
                     //		(http://www.sqlite.org/datatype3.html)
                     //  - "not null" means it is a required field (must be given a value).
                     // NOTE: All must be comma separated (end of line!) Last one must have NO comma!!
-                    + KEY_NAME + " text not null,"
+                    + KEY_NAME + " text not null, "
                     + KEY_Qns1 + " text not null, "
                     + KEY_Qns2 + " text not null, "
                     + KEY_Qns3 + " text not null, "

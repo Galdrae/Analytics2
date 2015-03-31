@@ -2,6 +2,7 @@ package com.example.deosfriend.apptest;
 
 import android.app.Activity;
 import android.app.ActivityGroup;
+import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,8 +14,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import java.util.Timer;
 
@@ -23,7 +26,7 @@ import database.SessionDBAdapter;
 /**
  * Created by L335A15 on 3/17/2015.
  */
-public class Timer_Test extends ActivityGroup{
+public class Timer_Test extends ActionBarActivity{
 
     Button buttonStart, flag, back, timeButton;
     TextView timerTextView, tvTest, interval, child, status, id, session, passName;
@@ -210,7 +213,7 @@ public class Timer_Test extends ActivityGroup{
         openDB();
         openSessionDB();
 
-   /*     toolbar = (Toolbar) findViewById(R.id.app_bar);
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationIcon(R.drawable.home);
@@ -222,7 +225,7 @@ public class Timer_Test extends ActivityGroup{
                         Timer_Test.this.startActivity(intent);
                     }
                 }
-        );*/
+        );
 
         //=========================Initalize===================================
 
@@ -246,7 +249,7 @@ public class Timer_Test extends ActivityGroup{
 
       //========================================================================
 
-        timeButton.setText("start");
+        timeButton.setText("Start");
 
         // Extract variable pass from previous activity
         final String childID = getIntent().getExtras().getString("childID");

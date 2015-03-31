@@ -1,14 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_height="fill_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_weight="1"
     tools:context=".MainActivity">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
     <EditText
         android:id="@+id/tbName"
@@ -33,7 +41,8 @@
         android:layout_alignEnd="@+id/rbFemale"
         android:onClick="onClick_Delete"
         android:text="Delete"
-        android:visibility="gone" />
+        android:visibility="gone"
+        />
 
     <RadioButton
         android:id="@+id/rbMale"
@@ -76,16 +85,23 @@
         android:text="View"
         android:visibility="gone" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="center|bottom"
+        android:orientation="vertical" >
     <Button
         android:id="@+id/btnCreate"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rbFemale"
-        android:layout_below="@+id/btnList"
         android:onClick="onClick_Create"
-        android:text="Enter"
+        android:text="Submit"
         android:background="@drawable/mybutton"
         android:textColor="#ffffffff"
-        android:layout_marginTop="250dp" />
+        android:layout_gravity="center_horizontal|center" />
+    </LinearLayout>
 
 </LinearLayout>
