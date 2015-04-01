@@ -106,8 +106,8 @@ public class MainActivity extends ActionBarActivity {
             long newID = myDB.insertRow(name, age, gender, R.drawable.icon_female, "Not observed");
 
             Cursor cursor = myDB.getRow(newID);
-            Message.message(this, "Female created");
-            displayRecordSet(cursor);
+            Message.message(this, "Female Child added");
+            //displayRecordSet(cursor);
             Intent intent = new Intent(MainActivity.this, ListView_Database.class);
             MainActivity.this.startActivity(intent);
         }
@@ -116,8 +116,8 @@ public class MainActivity extends ActionBarActivity {
             long newID = myDB.insertRow(name, age, gender, R.drawable.icon_male, "Not observed");
 
             Cursor cursor = myDB.getRow(newID);
-            Message.message(this, "Male created");
-            displayRecordSet(cursor);
+            Message.message(this, "Male Child added");
+           // displayRecordSet(cursor);
             Intent intent = new Intent(MainActivity.this, ListView_Database.class);
             MainActivity.this.startActivity(intent);
         }
@@ -134,8 +134,8 @@ public class MainActivity extends ActionBarActivity {
     // =================================================
     public void onClick_View(View v){
     //    Message.message(this, "View clicked");
-        Cursor cursor = myDB.getAllRows();
-        displayRecordSet(cursor);
+      //  Cursor cursor = myDB.getAllRowsIncomplete("Not observed");
+      //  displayRecordSet(cursor);
     }
 
     // Wipe Database

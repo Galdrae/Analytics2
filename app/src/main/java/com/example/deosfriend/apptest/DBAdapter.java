@@ -150,6 +150,28 @@ public class DBAdapter {
 		return c;
 	}
 
+    // Retrieve not observed or incomplete status in the database.
+    public Cursor getAllRowsIncomplete(String status, String status2) {
+        String where = KEY_STATUS + "=" + "'"+status+"'" + " OR " + KEY_STATUS + "=" + "'"+status2+"'";
+        Cursor c = 	db.query(true, DATABASE_TABLE, ALL_KEYS,
+                where, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    // Retrieve completed status in the database.
+    public Cursor getAllRowsCompleted(String status) {
+        String where = KEY_STATUS + "=" + "'"+status+"'";
+        Cursor c = 	db.query(true, DATABASE_TABLE, ALL_KEYS,
+                where, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
 	// Get a specific row (by rowId)
 	public Cursor getRow(long rowId) {
 		String where = KEY_ROWID + "=" + rowId;

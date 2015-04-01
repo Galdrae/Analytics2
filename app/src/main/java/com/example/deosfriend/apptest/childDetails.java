@@ -109,7 +109,7 @@ public class childDetails extends ActionBarActivity {
         Intent intent = getIntent();
 
         final String childID = getIntent().getExtras().getString("childID");
-        Toast.makeText(childDetails.this, "Passed through is: " + childID, Toast.LENGTH_LONG).show();
+       // Toast.makeText(childDetails.this, "Passed through is: " + childID, Toast.LENGTH_LONG).show();
 
         Long inID = Long.parseLong(childID);
 

@@ -41,26 +41,35 @@ public class ListView_Database extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview_layout_db_appbar);
 
+        // Action/tool bar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setLogo(R.drawable.main_icon);
 
+        // Navigation drawer
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer,(DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
 
+        // methods
         openDB();
-        populateListViewFromDB();
+
+        if (getIntent().getExtras() == null ){
+            populateListViewFromDB();
+        }
+        if ( getIntent().getExtras() != null){
+            String sortBy = getIntent().getExtras().getString("SortBy");
+            if ( sortBy.equals("Incomplete")){
+                sortListViewByIncomplete();
+            }
+            if ( sortBy.equals("Completed")){
+                sortListViewByCompleted();
+            }
+        }
+
         registerListCallBack();
 
-/*        name = (TextView) findViewById(R.id.tvName_Db);
-        age = (TextView) findViewById(R.id.tvAge_Db);
-        status = (TextView) findViewById(R.id.tvStatus);
-        Typeface face = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Black.ttf");
-        name.setTypeface(face);
-        age.setTypeface(face);
-        status.setTypeface(face);*/
     }
 
     protected void onDestroy() {
@@ -109,9 +118,62 @@ public class ListView_Database extends ActionBarActivity{
 
     }
 
+    // Default sorting
     private void populateListViewFromDB() {
 
         Cursor cursor = myDB.getAllRows();
+
+        startManagingCursor(cursor);
+
+        String[] fromFieldNames = new String[]
+                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_AGE, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS};
+        int[] toViewIDs = new int[]
+                {R.id.tvName_Db, R.id.tvAge_Db, R.id.lv_Image, R.id.tvStatus};
+
+        SimpleCursorAdapter myCursorAdapter =
+                new SimpleCursorAdapter(
+                        this,
+                        R.layout.listview_layout_db_row,
+                        cursor,
+                        fromFieldNames, // DB column names
+                        toViewIDs       // View IDS to put info in
+                );
+
+        // Set adapter for list view
+        ListView myList = (ListView) findViewById(R.id.listView_db);
+        myList.setAdapter(myCursorAdapter);
+    }
+
+    // sort by incomplete child
+    private void sortListViewByIncomplete() {
+
+        Cursor cursor = myDB.getAllRowsIncomplete("Not observed", "Incomplete");
+
+        startManagingCursor(cursor);
+
+        String[] fromFieldNames = new String[]
+                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_AGE, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS};
+        int[] toViewIDs = new int[]
+                {R.id.tvName_Db, R.id.tvAge_Db, R.id.lv_Image, R.id.tvStatus};
+
+        SimpleCursorAdapter myCursorAdapter =
+                new SimpleCursorAdapter(
+                        this,
+                        R.layout.listview_layout_db_row,
+                        cursor,
+                        fromFieldNames, // DB column names
+                        toViewIDs       // View IDS to put info in
+                );
+
+        // Set adapter for list view
+        ListView myList = (ListView) findViewById(R.id.listView_db);
+        myList.setAdapter(myCursorAdapter);
+    }
+
+    // sort by Completed child
+    private void sortListViewByCompleted() {
+
+        Cursor cursor = myDB.getAllRowsCompleted("Completed");
 
         startManagingCursor(cursor);
 
@@ -145,7 +207,7 @@ public class ListView_Database extends ActionBarActivity{
                 Cursor cursor = myDB.getRow(idInDB);
                 String id = String.valueOf(idInDB).toString();
 
-                Toast.makeText(ListView_Database.this, "Number is: " + id, Toast.LENGTH_LONG).show();
+                // Toast.makeText(ListView_Database.this, "Number is: " + id, Toast.LENGTH_LONG).show();
                 Intent myIntent = new Intent(ListView_Database.this, childDetails.class);
                 myIntent.putExtra("childID", id);
                 ListView_Database.this.startActivity(myIntent);

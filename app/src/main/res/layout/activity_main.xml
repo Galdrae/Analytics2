@@ -30,19 +30,8 @@
         android:id="@+id/tbAge"
         android:layout_height="wrap_content"
         android:hint="Age"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:layout_width="fill_parent"/>
-
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnCreate"
-        android:layout_alignEnd="@+id/rbFemale"
-        android:onClick="onClick_Delete"
-        android:text="Delete"
-        android:visibility="gone"
-        />
 
     <RadioButton
         android:id="@+id/rbMale"
@@ -72,7 +61,8 @@
         android:text="List"
         android:background="#2196F3"
         android:layout_marginTop="15dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        />
 
     <Button
         android:id="@+id/btnView"
@@ -83,7 +73,19 @@
         android:layout_marginBottom="50dp"
         android:onClick="onClick_View"
         android:text="View"
-        android:visibility="gone" />
+        android:visibility="gone"
+         />
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btnCreate"
+            android:layout_alignEnd="@+id/rbFemale"
+            android:onClick="onClick_Delete"
+            android:text="Delete"
+            android:visibility="gone"
+            />
 
     </LinearLayout>
 
@@ -99,7 +101,7 @@
         android:layout_height="wrap_content"
         android:onClick="onClick_Create"
         android:text="Submit"
-        android:background="@drawable/mybutton"
+        android:background="@drawable/a_mybutton"
         android:textColor="#ffffffff"
         android:layout_gravity="center_horizontal|center" />
     </LinearLayout>
