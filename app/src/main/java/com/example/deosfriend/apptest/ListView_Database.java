@@ -147,7 +147,7 @@ public class ListView_Database extends ActionBarActivity{
     // sort by incomplete child
     private void sortListViewByIncomplete() {
 
-        Cursor cursor = myDB.getAllRowsIncomplete("Not observed", "Incomplete");
+        Cursor cursor = myDB.getAllRowsIncomplete("Not observed", "Incomplete", "Fail");
 
         startManagingCursor(cursor);
 

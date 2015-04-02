@@ -151,8 +151,8 @@ public class DBAdapter {
 	}
 
     // Retrieve not observed or incomplete status in the database.
-    public Cursor getAllRowsIncomplete(String status, String status2) {
-        String where = KEY_STATUS + "=" + "'"+status+"'" + " OR " + KEY_STATUS + "=" + "'"+status2+"'";
+    public Cursor getAllRowsIncomplete(String status, String status2, String status3) {
+        String where = KEY_STATUS + "=" + "'"+status+"'" + " OR " + KEY_STATUS + "=" + "'"+status2+"'" + " OR " + KEY_STATUS + "=" + "'"+status3+"'";
         Cursor c = 	db.query(true, DATABASE_TABLE, ALL_KEYS,
                 where, null, null, null, null, null);
         if (c != null) {
