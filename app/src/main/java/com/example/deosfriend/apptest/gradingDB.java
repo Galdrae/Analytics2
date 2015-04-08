@@ -3,6 +3,7 @@ package com.example.deosfriend.apptest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -33,7 +34,7 @@ public class gradingDB{
     public static final String DATABASE_NAME = "gradingDb";
     public static final String DATABASE_TABLE = "GradingTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 11;
 
     private static final String DATABASE_CREATE_SQL =
             "create table " + DATABASE_TABLE
@@ -49,7 +50,7 @@ public class gradingDB{
                     //		(http://www.sqlite.org/datatype3.html)
                     //  - "not null" means it is a required field (must be given a value).
                     // NOTE: All must be comma separated (end of line!) Last one must have NO comma!!
-                    + KEY_NAME + " text not null, "
+                    + KEY_NAME + " text not null unique, "
                     + KEY_Qns1 + " text not null, "
                     + KEY_Qns2 + " text not null, "
                     + KEY_Qns3 + " text not null, "
@@ -80,6 +81,41 @@ public class gradingDB{
         db = myDBHelper.getWritableDatabase();
         return this;
     }
+    //_______________________________________________________________//_______________________________________________________________//_______________________________________________________________
+
+    // Get a specific row (by name)
+    public Cursor getRow1(String name) {
+        String where = KEY_NAME + "= '" + name + "'";
+        Cursor c = 	db.query(true, DATABASE_TABLE, ALL_KEYS,
+                where, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public boolean checkExist(String _username) throws SQLException {
+        int count = -1;
+        Cursor c = null;
+        try {
+            String query = "SELECT COUNT(*) FROM "
+                    + DATABASE_TABLE + " WHERE " + KEY_NAME + " = ?";
+            c = db.rawQuery(query, new String[] {_username});
+            if (c.moveToFirst()) {
+                count = c.getInt(0);
+            }
+            return count > 0;
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+//_______________________________________________________________//_______________________________________________________________//_______________________________________________________________
+
+
 
     // Close the database connection.
     public void close() {
@@ -172,7 +208,7 @@ public class gradingDB{
         return db.update(DATABASE_TABLE, newValues, where, null) != 0;
     }
 
-    public void updateRecord(long rowID, String qns1, String qns2, String qns3, String qns4, String qns5)
+    public void updateRecord(String childName, String qns1, String qns2, String qns3, String qns4, String qns5)
     {
         ContentValues newValues = new ContentValues();
         //newValues.put(KEY_NAME, childName);
@@ -181,7 +217,7 @@ public class gradingDB{
         newValues.put(KEY_Qns3, qns3);
         newValues.put(KEY_Qns4, qns4);
         newValues.put(KEY_Qns5, qns5);
-        db.update(DATABASE_TABLE, newValues, KEY_ROWID + "=" + rowID, null);
+        db.update(DATABASE_TABLE, newValues, KEY_NAME + "= '" + childName + "'", null);
 
     }
 
