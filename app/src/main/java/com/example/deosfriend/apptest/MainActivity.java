@@ -93,7 +93,7 @@ public class MainActivity extends ActionBarActivity {
         if ( female.isChecked())
                    gender = female.getText().toString();
 
-        if ( name=="" || age==""  ){
+        if ( name.isEmpty() || age.isEmpty()  ){
             errorMsg = "Please fill in fields";
             Message.message(this, errorMsg);
         }
@@ -103,7 +103,7 @@ public class MainActivity extends ActionBarActivity {
         }
         if (errorMsg == "" && female.isChecked())
         {
-            long newID = myDB.insertRow(name, age, gender, R.drawable.icon_female, "Not observed");
+            long newID = myDB.insertRow(name, age, gender, R.drawable.female_user, "Not observed");
 
             Cursor cursor = myDB.getRow(newID);
             Message.message(this, "Female Child added");
@@ -113,7 +113,7 @@ public class MainActivity extends ActionBarActivity {
         }
         if (errorMsg == "" && male.isChecked())
         {
-            long newID = myDB.insertRow(name, age, gender, R.drawable.icon_male, "Not observed");
+            long newID = myDB.insertRow(name, age, gender, R.drawable.male_user, "Not observed");
 
             Cursor cursor = myDB.getRow(newID);
             Message.message(this, "Male Child added");

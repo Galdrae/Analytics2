@@ -183,7 +183,11 @@
                     android:id="@+id/tab3"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="40dp"
+                    android:background="#FAFAFA">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -341,7 +345,12 @@
                     android:id="@+id/gradingTab"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="40dp"
+                    android:background="#FAFAFA"
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"

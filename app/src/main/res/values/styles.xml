@@ -10,5 +10,11 @@
 
     </style>
 
+    <!-- ActionBar title text -->
+    <style name="MyCustomToolBarTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">#FAFAFA</item>
+        <item name="android:textColorSecondary">#FAFAFA</item>
+    </style>
+
 
 </resources>
