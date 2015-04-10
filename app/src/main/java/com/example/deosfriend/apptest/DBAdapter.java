@@ -30,7 +30,14 @@ public class DBAdapter {
 	 */
 	// TODO: Setup your fields here:
 	public static final String KEY_CHILDNAME = "ChildName";
-	public static final String KEY_AGE = "Age";
+	public static final String KEY_PRIDI = "PrimaryDiagnosis";
+    public static final String KEY_SECDI = "SecondaryDiagnosis";
+    public static final String KEY_REMARKS = "Remarks";
+    public static final String KEY_INSPECTOR = "Inspector";
+    public static final String KEY_VENUE = "Venue";
+    public static final String KEY_ACTIVITY = "Activity";
+    public static final String KEY_NOADULTS = "NoOfAdults";
+    public static final String KEY_NOCHILDREN = "NoOfChildren";
     public static final String KEY_GENDER = "Gender";
     public static final String KEY_IMAGE = "Icon";
     public static final String KEY_STATUS = "Status";
@@ -44,13 +51,13 @@ public class DBAdapter {
 
 
 	
-	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_CHILDNAME, KEY_AGE, KEY_GENDER, KEY_IMAGE, KEY_STATUS};
+	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_CHILDNAME, KEY_GENDER, KEY_PRIDI, KEY_SECDI, KEY_REMARKS, KEY_INSPECTOR, KEY_VENUE, KEY_ACTIVITY, KEY_NOADULTS, KEY_NOCHILDREN, KEY_IMAGE, KEY_STATUS};
 	
 	// DB info: it's name, and the table we are using (just one).
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "ChildTable";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 9;
+	public static final int DATABASE_VERSION = 10;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 
@@ -68,7 +75,14 @@ public class DBAdapter {
 			// NOTE: All must be comma separated (end of line!) Last one must have NO comma!!
                     + KEY_CHILDNAME + " text not null, "
                     + KEY_GENDER + " text not null, "
-                    + KEY_AGE + " text not null, "
+                    + KEY_PRIDI + " text not null, "
+                    + KEY_SECDI + " text not null, "
+                    + KEY_REMARKS + " text not null, "
+                    + KEY_INSPECTOR + " text not null, "
+                    + KEY_VENUE + " text not null, "
+                    + KEY_ACTIVITY + " text not null, "
+                    + KEY_NOADULTS + " text not null, "
+                    + KEY_NOCHILDREN + " text not null, "
                     + KEY_IMAGE + " integer not null, "
                     + KEY_STATUS + " text "
 
@@ -103,7 +117,7 @@ public class DBAdapter {
 	}
 	
 	// Add a new set of values to the database.
-	public long insertRow(String childName , String age,  String gender, int icon, String status) {
+	public long insertRow(String childName , String gender, String priDi, String secDi, String remarks, String inspector, String venue, String activity, String noAdults, String noChildren, int icon, String status) {
 		/*
 		 * CHANGE 3:
 		 */		
@@ -112,11 +126,17 @@ public class DBAdapter {
 		// Create row's data:
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_CHILDNAME, childName);
-		initialValues.put(KEY_AGE, age);
         initialValues.put(KEY_GENDER, gender);
+        initialValues.put(KEY_PRIDI, priDi);
+        initialValues.put(KEY_SECDI, secDi);
+        initialValues.put(KEY_REMARKS, remarks);
+        initialValues.put(KEY_INSPECTOR, inspector);
+        initialValues.put(KEY_VENUE, venue);
+        initialValues.put(KEY_ACTIVITY, activity);
+        initialValues.put(KEY_NOADULTS, noAdults);
+        initialValues.put(KEY_NOCHILDREN, noChildren);
         initialValues.put(KEY_IMAGE, icon);
         initialValues.put(KEY_STATUS, status);
-
 
 		// Insert it into the database.
 		return db.insert(DATABASE_TABLE, null, initialValues);
@@ -184,7 +204,7 @@ public class DBAdapter {
 	}
 	
 	// Change an existing row to be equal to new data.
-	public boolean updateRow(long rowId, String childName, String age, String gender, String status) {
+	public boolean updateRow(long rowId, String childName, String priDi, String gender, String status) {
 		String where = KEY_ROWID + "=" + rowId;
 
 		/*
@@ -195,7 +215,7 @@ public class DBAdapter {
 		// Create row's data:
 		ContentValues newValues = new ContentValues();
 		newValues.put(KEY_CHILDNAME, childName);
-		newValues.put(KEY_AGE, age);
+		newValues.put(KEY_PRIDI, priDi);
         newValues.put(KEY_GENDER, gender);
         newValues.put(KEY_STATUS, status);
 

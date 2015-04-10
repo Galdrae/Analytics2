@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_weight="1"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <include
@@ -13,98 +13,146 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#FAFAFA">
+        android:background="#FAFAFA"
+        android:orientation="vertical">
 
         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/card_view"
             android:layout_width="match_parent"
-            android:layout_height="10dp"
+            android:layout_height="3dp"
             android:background="#03A9F4"
             card_view:cardBackgroundColor="#03A9F4">
 
         </android.support.v7.widget.CardView>
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FAFAFA"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <EditText
+                android:id="@+id/tbName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:typeface="sans" />
+
+            <RadioButton
+                android:id="@+id/rbMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/rbFemale"
+                android:layout_toEndOf="@+id/btnList"
+                android:onClick="onClick_rbMale"
+                android:text="Male" />
+
+            <RadioButton
+                android:id="@+id/rbFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/tbAge"
+                android:layout_below="@+id/tbAge"
+                android:onClick="onClick_rbFemale"
+                android:text="Female" />
+
+            <EditText
+                android:id="@+id/tbPriDi"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Primary Diagnosis"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/tbSecDi"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Secondary Diagnosis"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/tbRemarks"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Remarks"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/tbInspector"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Inspector"
+                android:inputType="text" />
+
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:background="#FAFAFA"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                >
+                android:id="@+id/spinnerVenue"
+                android:layout_gravity="center_horizontal"
+                android:spinnerMode="dropdown"
+                android:popupBackground="#ffffffff"
+                />
 
-    <EditText
-        android:id="@+id/tbName"
-        android:layout_height="wrap_content"
-        android:hint="Name"
-        android:inputType="textPersonName"
-        android:layout_width="fill_parent"
-        android:layout_marginTop="50dp"
-        android:typeface="sans" />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerActivity"
+                android:layout_gravity="center_horizontal"
+                android:spinnerMode="dropdown"
+                android:popupBackground="#ffffffff"/>
 
-    <EditText
-        android:id="@+id/tbAge"
-        android:layout_height="wrap_content"
-        android:hint="Age"
-        android:inputType="number"
-        android:layout_width="fill_parent"/>
+            <EditText
+                android:id="@+id/tbNoAdults"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="No. of Adults"
+                android:inputType="number" />
 
-    <RadioButton
-        android:id="@+id/rbMale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/rbFemale"
-        android:layout_toEndOf="@+id/btnList"
-        android:onClick="onClick_rbMale"
-        android:text="Male" />
+            <EditText
+                android:id="@+id/tbNoChildren"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="No. of Children"
+                android:inputType="number" />
 
-    <RadioButton
-        android:id="@+id/rbFemale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tbAge"
-        android:layout_below="@+id/tbAge"
-        android:onClick="onClick_rbFemale"
-        android:text="Female" />
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btnCreate"
+                android:layout_alignEnd="@+id/rbFemale"
+                android:onClick="onClick_Delete"
+                android:text="Delete" />
 
-    <Button
-        android:id="@+id/btnList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnView"
-        android:layout_alignStart="@+id/btnView"
-        android:onClick="onClick_List"
-        android:text="List"
-        android:background="#2196F3"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"
-        />
+            <Button
+                android:id="@+id/btnList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btnView"
+                android:layout_alignStart="@+id/btnView"
+                android:layout_marginTop="15dp"
+                android:background="#2196F3"
+                android:onClick="onClick_List"
+                android:text="List"
+                android:visibility="gone" />
 
-    <Button
-        android:id="@+id/btnView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/tvTabs"
-        android:layout_marginBottom="50dp"
-        android:onClick="onClick_View"
-        android:text="View"
-        android:visibility="gone"
-         />
+            <Button
+                android:id="@+id/btnView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/tvTabs"
+                android:layout_marginBottom="50dp"
+                android:onClick="onClick_View"
+                android:text="View"
+                android:visibility="gone" />
 
-        <Button
-            android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/btnCreate"
-            android:layout_alignEnd="@+id/rbFemale"
-            android:onClick="onClick_Delete"
-            android:text="Delete"
-            />
-
-            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -112,18 +160,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
+        android:background="#FAFAFA"
         android:gravity="center|bottom"
-        android:orientation="vertical"
-        android:background="#FAFAFA">
-    <Button
-        android:id="@+id/btnCreate"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onClick_Create"
-        android:text="Submit"
-        android:background="@drawable/a_mybutton"
-        android:textColor="#ffffffff"
-        android:layout_gravity="center_horizontal|center" />
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center"
+            android:background="@drawable/a_mybutton"
+            android:onClick="onClick_Create"
+            android:text="Submit"
+            android:textColor="#ffffffff" />
     </LinearLayout>
 
 </LinearLayout>

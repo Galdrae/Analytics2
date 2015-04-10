@@ -8,8 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import Controller.Message;
@@ -19,8 +21,33 @@ import database.SessionDBAdapter;
 public class MainActivity extends ActionBarActivity {
 
     Button create, view;
-    TextView tbName, tbAge;
+    TextView inName, inPriDi, inSecDi, inRemarks, inInspector, inNoAdults, inNoChildren;
     RadioButton male, female;
+
+    Spinner spinnerDDVenue;
+    Spinner spinnerDDActivity;
+
+    String[] venueSpinner = {
+            "[ Select Venue ]",
+            "Ngee Ann Child Centre",
+            "Bedok North Care Centre",
+            "Eng Neo Child Centre",
+            "Alekandra Hospital",
+            "Stamford Junior school",
+
+    };
+
+    String[] activitySpinner = {
+            "[ Select Activty ]",
+            "Hearing Test",
+            "Interaction Screening",
+            "Sensory-motor Evaluation",
+            "Cognitive Evaluation Test",
+            "Interest Screening Test",
+            "Adaptive Function Assessment",
+            "Adaptive Behaviour Screening Test",
+
+    };
 
     DBAdapter myDB;
     SessionDBAdapter mySessionDB;
@@ -32,12 +59,27 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        spinnerDDVenue = (Spinner) findViewById(R.id.spinnerVenue);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.
+                R.layout.simple_spinner_dropdown_item, venueSpinner);
+        spinnerDDVenue.setAdapter(adapter);
+        spinnerDDVenue.setPrompt("Select your favorite Planet!");
+
+        // for activity
+        spinnerDDActivity = (Spinner) findViewById(R.id.spinnerActivity);
+
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.
+                R.layout.simple_spinner_dropdown_item, activitySpinner);
+
+        spinnerDDActivity.setAdapter(adapter1);
+
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationIcon(R.drawable.home);
         toolbar.setNavigationOnClickListener(
-                new View.OnClickListener(){
+                new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(MainActivity.this, ListView_Database.class);
@@ -46,8 +88,8 @@ public class MainActivity extends ActionBarActivity {
                 }
         );
 
-         create = (Button)findViewById(R.id.btnCreate);
-         view = (Button)findViewById(R.id.btnView);
+        create = (Button) findViewById(R.id.btnCreate);
+        view = (Button) findViewById(R.id.btnView);
 
         openDB();
         openSessionDB();
@@ -60,12 +102,12 @@ public class MainActivity extends ActionBarActivity {
         closeDB();
     }
 
-    private void openDB(){
+    private void openDB() {
         myDB = new DBAdapter(this);
         myDB.open();
     }
 
-    private void openSessionDB(){
+    private void openSessionDB() {
         mySessionDB = new SessionDBAdapter(this);
         mySessionDB.open();
     }
@@ -76,34 +118,59 @@ public class MainActivity extends ActionBarActivity {
 
     // Create record
     // =================================================
-    public void onClick_Create(View v){
+    public void onClick_Create(View v) {
 
-        tbName = (TextView)findViewById(R.id.tbName);
-        tbAge = (TextView)findViewById(R.id.tbAge);
-        female = (RadioButton)findViewById(R.id.rbFemale);
-        male = (RadioButton)findViewById(R.id.rbMale);
+        inName = (TextView) findViewById(R.id.tbName);
+        inPriDi = (TextView) findViewById(R.id.tbPriDi);
+        inSecDi = (TextView) findViewById(R.id.tbSecDi);
+        inRemarks = (TextView) findViewById(R.id.tbRemarks);
+        inInspector = (TextView) findViewById(R.id.tbInspector);
+        inNoAdults = (TextView) findViewById(R.id.tbNoAdults);
+        inNoChildren = (TextView) findViewById(R.id.tbNoChildren);
+        female = (RadioButton) findViewById(R.id.rbFemale);
+        male = (RadioButton) findViewById(R.id.rbMale);
 
-        String name = tbName.getText().toString();
-        String age = tbAge.getText().toString();
+        String name = inName.getText().toString();
+        String priDi = inPriDi.getText().toString();
+        String secDi = inSecDi.getText().toString();
+        String remarks = inRemarks.getText().toString();
+        String inspector = inInspector.getText().toString();
+        String noOfAdults = inNoAdults.getText().toString();
+        String noOfChildren = inNoChildren.getText().toString();
+
         String gender = "";
         String errorMsg = "";
 
-        if ( male.isChecked())
-                   gender = male.getText().toString();
-        if ( female.isChecked())
-                   gender = female.getText().toString();
+        // Validations
+        if (spinnerDDVenue.getSelectedItem() == "[ Select Venue ]" )
+        { errorMsg = "Select a venue"; Message.message(this, errorMsg); }
+        if (spinnerDDActivity.getSelectedItem() == "[ Select Activty ]" )
+        { errorMsg = "Select a venue"; Message.message(this, errorMsg); }
 
-        if ( name.isEmpty() || age.isEmpty()  ){
+        // gender
+        if (male.isChecked())
+            gender = male.getText().toString();
+        if (female.isChecked())
+            gender = female.getText().toString();
+
+        // textfields
+        if ( name.isEmpty() || priDi.isEmpty() || secDi.isEmpty() || remarks.isEmpty() || inspector.isEmpty() || noOfAdults.isEmpty() || noOfChildren.isEmpty()) {
             errorMsg = "Please fill in fields";
             Message.message(this, errorMsg);
         }
-        if ( female.isChecked() == false && male.isChecked() == false ){
-            errorMsg = "Fields not filled";
+        if (female.isChecked() == false && male.isChecked() == false) {
+            errorMsg = "Select gender";
             Message.message(this, errorMsg);
         }
-        if (errorMsg == "" && female.isChecked())
-        {
-            long newID = myDB.insertRow(name, age, gender, R.drawable.female_user, "Not observed");
+        //===================================================================
+
+
+
+        // if all fields are filled
+        if (errorMsg == "" && female.isChecked()) {
+            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed");
 
             Cursor cursor = myDB.getRow(newID);
             Message.message(this, "Female Child added");
@@ -111,80 +178,90 @@ public class MainActivity extends ActionBarActivity {
             Intent intent = new Intent(MainActivity.this, ListView_Database.class);
             MainActivity.this.startActivity(intent);
         }
-        if (errorMsg == "" && male.isChecked())
-        {
-            long newID = myDB.insertRow(name, age, gender, R.drawable.male_user, "Not observed");
+        if (errorMsg == "" && male.isChecked()) {
+            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed");
 
             Cursor cursor = myDB.getRow(newID);
             Message.message(this, "Male Child added");
-           // displayRecordSet(cursor);
+            // displayRecordSet(cursor);
             Intent intent = new Intent(MainActivity.this, ListView_Database.class);
             MainActivity.this.startActivity(intent);
         }
 
-        tbName.setText("");
-        tbAge.setText("");
-        female.setChecked(false);
-        male.setChecked(false);
+ /*       if ( errorMsg == "" ){
+            inName.setText("");
+            inPriDi.setText("");
+            inRemarks.setText("");
+            inInspector.setText("");
+            inNoAdults.setText("");
+            inNoChildren.setText("");
+            spinnerDDActivity.setSelection(0);
+            spinnerDDVenue.setSelection(0);
+            female.setChecked(false);
+            male.setChecked(false);
+        }*/
 
         mySessionDB.insertRow(name, "Not observed", "1", "");
     }
 
     // View Database
     // =================================================
-    public void onClick_View(View v){
-    //    Message.message(this, "View clicked");
-      //  Cursor cursor = myDB.getAllRowsIncomplete("Not observed");
-      //  displayRecordSet(cursor);
+    public void onClick_View(View v) {
+        //    Message.message(this, "View clicked");
+        //  Cursor cursor = myDB.getAllRowsIncomplete("Not observed");
+        //  displayRecordSet(cursor);
     }
 
     // Wipe Database
     // =================================================
-    public void onClick_Delete(View v){
-    //    Message.message(this, "Delete clicked");
+    public void onClick_Delete(View v) {
+        //    Message.message(this, "Delete clicked");
         myDB.deleteAll();
 
     }
 
     // Go to View List
     // =================================================
-    public void onClick_List(View v){
+    public void onClick_List(View v) {
         Intent intent = new Intent(MainActivity.this, ListView_Database.class);
         MainActivity.this.startActivity(intent);
     }
 
     // Radio Buttons
     // =================================================
-    public void onClick_rbMale(View v){
-        female = (RadioButton)findViewById(R.id.rbFemale);
+    public void onClick_rbMale(View v) {
+        female = (RadioButton) findViewById(R.id.rbFemale);
         female.setChecked(false);
     }
-    public void onClick_rbFemale(View v){
-        male = (RadioButton)findViewById(R.id.rbMale);
+
+    public void onClick_rbFemale(View v) {
+        male = (RadioButton) findViewById(R.id.rbMale);
         male.setChecked(false);
     }
 
     // Retreive Database
-    private void displayRecordSet(Cursor cursor){
+    private void displayRecordSet(Cursor cursor) {
 
         String message = "";
 
-        if (cursor.moveToFirst()){
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 int id = cursor.getInt(0);
                 String name = cursor.getString(1);
                 String age = cursor.getString(2);
                 String gender = cursor.getString(3);
                 String image = cursor.getString(4);
 
-                message += "ID: " +id
-                        +", Name: " + name
-                        +", Age: " + age
-                        +", Gender: " + gender
-                        +", Image is: " + image
-                        +"\n";
+                message += "ID: " + id
+                        + ", Name: " + name
+                        + ", Age: " + age
+                        + ", Gender: " + gender
+                        + ", Image is: " + image
+                        + "\n";
             } while (cursor.moveToNext());
-         }
+        }
 
         cursor.close();
         Message.message(this, message);

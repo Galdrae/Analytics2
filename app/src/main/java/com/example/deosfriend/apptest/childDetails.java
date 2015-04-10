@@ -32,7 +32,7 @@ import Controller.Message;
 public class childDetails extends ActionBarActivity {
 
     DBAdapter myDB;
-    EditText childName, childAge, childGender;
+    EditText childName, childGender, childPriDi, childSecDi, childRemarks, childInspector, childVenue, childActivity, childNoAdults, childNoChildren;
     Button start;
     String childName4;
 
@@ -90,8 +90,16 @@ public class childDetails extends ActionBarActivity {
         // ===================================================
 
         childName = (EditText)findViewById(R.id.tbName);
-        childAge = (EditText)findViewById(R.id.tbAge);
         childGender = (EditText)findViewById(R.id.tbGender);
+        childPriDi  = (EditText)findViewById(R.id.tbPriDi);
+        childSecDi = (EditText) findViewById(R.id.tbSecDi);
+        childRemarks = (EditText) findViewById(R.id.tbRemarks);
+        childInspector = (EditText) findViewById(R.id.tbInspector);
+        childVenue = (EditText) findViewById(R.id.tbVenue);
+        childActivity = (EditText) findViewById(R.id.tbActivity);
+        childNoAdults = (EditText) findViewById(R.id.tbNoAdults);
+        childNoChildren = (EditText) findViewById(R.id.tbNoChildren);
+
         start = (Button) findViewById(R.id.btnObserve);
 
         openDB();
@@ -104,9 +112,16 @@ public class childDetails extends ActionBarActivity {
         Long inID = Long.parseLong(childID);
 
         Cursor cursor = myDB.getRow(inID);
-        childName.setText(cursor.getString(1));
-        childAge.setText(cursor.getString(2));
-        childGender.setText(cursor.getString(3));
+        childName.setText("Name:     " + cursor.getString(1));
+        childGender.setText("Gender:   " + cursor.getString(2));
+        childPriDi.setText(cursor.getString(3));
+        childSecDi.setText(cursor.getString(4));
+        childRemarks.setText(cursor.getString(5));
+        childInspector.setText(cursor.getString(6));
+        childVenue.setText(cursor.getString(7));
+        childActivity.setText(cursor.getString(8));
+        childNoAdults.setText("No. of Adults:     " + cursor.getString(9));
+        childNoChildren.setText("No. of Children: " + cursor.getString(10));
 
         childName4 = cursor.getString(1);
 
