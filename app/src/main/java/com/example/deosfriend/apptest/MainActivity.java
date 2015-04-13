@@ -14,6 +14,11 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import Controller.Message;
 import database.SessionDBAdapter;
 
@@ -21,7 +26,7 @@ import database.SessionDBAdapter;
 public class MainActivity extends ActionBarActivity {
 
     Button create, view;
-    TextView inName, inPriDi, inSecDi, inRemarks, inInspector, inNoAdults, inNoChildren;
+    TextView inName, inPriDi, inSecDi, inRemarks, inInspector, inNoAdults, inNoChildren, testTimer;
     RadioButton male, female;
 
     Spinner spinnerDDVenue;
@@ -88,6 +93,9 @@ public class MainActivity extends ActionBarActivity {
                 }
         );
 
+        testTimer = (TextView) findViewById(R.id.testTimer);
+    //    testTimer.setText(String.valueOf(dateString));
+
         create = (Button) findViewById(R.id.btnCreate);
         view = (Button) findViewById(R.id.btnView);
 
@@ -119,6 +127,7 @@ public class MainActivity extends ActionBarActivity {
     // Create record
     // =================================================
     public void onClick_Create(View v) {
+
 
         inName = (TextView) findViewById(R.id.tbName);
         inPriDi = (TextView) findViewById(R.id.tbPriDi);
@@ -164,13 +173,11 @@ public class MainActivity extends ActionBarActivity {
         }
         //===================================================================
 
-
-
         // if all fields are filled
         if (errorMsg == "" && female.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
-                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed");
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 1);
 
             Cursor cursor = myDB.getRow(newID);
             Message.message(this, "Female Child added");
@@ -181,7 +188,7 @@ public class MainActivity extends ActionBarActivity {
         if (errorMsg == "" && male.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
-                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed");
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 1);
 
             Cursor cursor = myDB.getRow(newID);
             Message.message(this, "Male Child added");
@@ -190,20 +197,6 @@ public class MainActivity extends ActionBarActivity {
             MainActivity.this.startActivity(intent);
         }
 
- /*       if ( errorMsg == "" ){
-            inName.setText("");
-            inPriDi.setText("");
-            inRemarks.setText("");
-            inInspector.setText("");
-            inNoAdults.setText("");
-            inNoChildren.setText("");
-            spinnerDDActivity.setSelection(0);
-            spinnerDDVenue.setSelection(0);
-            female.setChecked(false);
-            male.setChecked(false);
-        }*/
-
-        mySessionDB.insertRow(name, "Not observed", "1", "");
     }
 
     // View Database

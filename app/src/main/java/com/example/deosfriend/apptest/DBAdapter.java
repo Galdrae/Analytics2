@@ -41,6 +41,7 @@ public class DBAdapter {
     public static final String KEY_GENDER = "Gender";
     public static final String KEY_IMAGE = "Icon";
     public static final String KEY_STATUS = "Status";
+    public static final String KEY_SESSIONNO = "SessionNumber";
 	
 	// TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
 	public static final int COL_CHILDNAME = 1;
@@ -51,13 +52,13 @@ public class DBAdapter {
 
 
 	
-	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_CHILDNAME, KEY_GENDER, KEY_PRIDI, KEY_SECDI, KEY_REMARKS, KEY_INSPECTOR, KEY_VENUE, KEY_ACTIVITY, KEY_NOADULTS, KEY_NOCHILDREN, KEY_IMAGE, KEY_STATUS};
+	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_CHILDNAME, KEY_GENDER, KEY_PRIDI, KEY_SECDI, KEY_REMARKS, KEY_INSPECTOR, KEY_VENUE, KEY_ACTIVITY, KEY_NOADULTS, KEY_NOCHILDREN, KEY_IMAGE, KEY_STATUS, KEY_SESSIONNO};
 	
 	// DB info: it's name, and the table we are using (just one).
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "ChildTable";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 10;
+	public static final int DATABASE_VERSION = 11;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 
@@ -84,7 +85,8 @@ public class DBAdapter {
                     + KEY_NOADULTS + " text not null, "
                     + KEY_NOCHILDREN + " text not null, "
                     + KEY_IMAGE + " integer not null, "
-                    + KEY_STATUS + " text "
+                    + KEY_STATUS + " text not null, "
+                    + KEY_SESSIONNO + " integer "
 
 			
 			// Rest  of creation:
@@ -117,7 +119,8 @@ public class DBAdapter {
 	}
 	
 	// Add a new set of values to the database.
-	public long insertRow(String childName , String gender, String priDi, String secDi, String remarks, String inspector, String venue, String activity, String noAdults, String noChildren, int icon, String status) {
+	public long insertRow(String childName , String gender, String priDi, String secDi, String remarks,
+                          String inspector, String venue, String activity, String noAdults, String noChildren, int icon, String status, int sessionNo) {
 		/*
 		 * CHANGE 3:
 		 */		
@@ -137,6 +140,7 @@ public class DBAdapter {
         initialValues.put(KEY_NOCHILDREN, noChildren);
         initialValues.put(KEY_IMAGE, icon);
         initialValues.put(KEY_STATUS, status);
+        initialValues.put(KEY_SESSIONNO, sessionNo);
 
 		// Insert it into the database.
 		return db.insert(DATABASE_TABLE, null, initialValues);

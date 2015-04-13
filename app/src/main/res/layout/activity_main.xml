@@ -120,6 +120,13 @@
                 android:hint="No. of Children"
                 android:inputType="number" />
 
+            <TextView
+                android:id="@+id/testTimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="test"
+                />
+
             <Button
                 android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"

@@ -19,8 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 
+import Controller.Message;
 import database.SessionDBAdapter;
 
 /**
@@ -29,7 +32,7 @@ import database.SessionDBAdapter;
 public class Timer_Test extends ActionBarActivity{
 
     Button buttonStart, flag, back, timeButton;
-    TextView timerTextView, tvTest, interval, child, status, id, session, passName;
+    TextView timerTextView, tvTest, interval, child, status, id, session, passName, tvStartTime;
 
     DBAdapter myDB;
     SessionDBAdapter mySessionDB;
@@ -83,7 +86,7 @@ public class Timer_Test extends ActionBarActivity{
             timerTextView.setText(String.format("%d:%02d", minutes, seconds));
             tvTest.setBackgroundColor(Color.YELLOW);
 
-            tvTest.setText("Observe...");
+            tvTest.setText("Observe");
             timerHandler.postDelayed(this, 2);
 
             // ===================== Countdown observe ========================
@@ -93,7 +96,7 @@ public class Timer_Test extends ActionBarActivity{
             if ( count2 < 8){
                 count2++;
                 count3 = count3 - seconds;
-                tvTest.setText("Observe..." + (count3));
+                tvTest.setText("Observe (" + (count3) +")");
             }
             // ================================================================
 
@@ -116,7 +119,7 @@ public class Timer_Test extends ActionBarActivity{
                 if ( count2 < 5){
                     count2++;
                     count4 = count4 - countSeconds;
-                    tvTest.setText("Record..." + (count4));
+                    tvTest.setText("Record (" + (count4) + ")");
                 }
                 tvTest.setBackgroundColor(Color.GREEN);
             }
@@ -171,6 +174,7 @@ public class Timer_Test extends ActionBarActivity{
                     interval.setText("Interval: " + (count) + " x 15s");
                     timerTextView.setText(("End of Session"));
                     tvTest.setText("");
+                    tvTest.setBackgroundColor(0);
                     buttonStart.setText("End");
                     buttonStart.setEnabled(false);
                     flag.setEnabled(false);
@@ -179,7 +183,7 @@ public class Timer_Test extends ActionBarActivity{
                     Cursor cursor2 = mySessionDB.getRow(inID);
                     int sessionCount = Integer.parseInt(cursor2.getString(3));
                     sessionCount = sessionCount + 1;
-                    mySessionDB.updateRow(inID, "Completed", String.valueOf(sessionCount), "date");
+                    // mySessionDB.updateRow(inID, "Completed", String.valueOf(sessionCount), "date");
                 }
                 else { // if haven't reach maximun interval, continue and add interval count
 
@@ -237,6 +241,7 @@ public class Timer_Test extends ActionBarActivity{
         id = (TextView) findViewById(R.id.tvId);
         session = (TextView) findViewById(R.id.tvSession);
         passName = (TextView) findViewById(R.id.tvPassChildName);
+        tvStartTime = (TextView) findViewById(R.id.tvStartTime);
 
         buttonStart = (Button) findViewById(R.id.btnStart);
         timeButton = (Button) findViewById(R.id.btnStart);
@@ -253,40 +258,106 @@ public class Timer_Test extends ActionBarActivity{
 
         // Extract variable pass from previous activity
         final String childID = getIntent().getExtras().getString("childID");
-        String childName = getIntent().getExtras().getString("childName");
+        final String childName = getIntent().getExtras().getString("childName");
 
         final Long inID = Long.parseLong(childID);
         final Cursor cursor = myDB.getRow(inID);
+        final Cursor cursor2 = mySessionDB.getRow(inID);
 
+        // Child Table datas
+        final String idRetrieve = cursor.getString(0);
+        String nameRetrieve = cursor.getString(1);
+        final String priDiRetrieve = cursor.getString(3);
+        final String secDiRetrieve = cursor.getString(4);
+        final String inspectorRetrieve = cursor.getString(6);
+        final String venueRetrieve = cursor.getString(7);
+
+        // Session Table data
+
+/*
+        // date and time code
+        long dateInMillis = System.currentTimeMillis();
+        String formatDate = "dd-MM-yyyy";
+        String formatTime =  "HH:mm:ss";
+        // convert date to format
+        final SimpleDateFormat dateString = new SimpleDateFormat(formatDate);
+        // convert time
+        final SimpleDateFormat timeString = new SimpleDateFormat(formatTime);
+        final String date = dateString.format(new Date(dateInMillis));
+        final String time = timeString.format(new Date(dateInMillis));
+*/
+
+        // set text
         id.setText(childID);
-        status.setText("  Current status: " + cursor.getString(5));
-        child.setText("  Currently observing: " + childName);
         passName.setText(childName);
-
-        Cursor cursor2 = mySessionDB.getRow(inID);
-        int sessionCount = Integer.parseInt(cursor2.getString(3));
-        session.setText("  Session number: " + sessionCount);
+        status.setText("  Current status: " + cursor.getString(12));
+        child.setText("  Currently observing: " + childName);
+        session.setText("  Session number: ");
+        tvStartTime.setText("  Session started at: ");
 
         // The start button
         timeButton.setOnClickListener(
                 new View.OnClickListener(){
                     public void onClick(View v) { // Stop and reset interval
                         Button timeButton = (Button) v;
-                        if (timeButton.getText().equals("Stop")) {
+                        if (timeButton.getText().equals("Pause")) {
+
+                            // date and time code
+                            long dateInMillis = System.currentTimeMillis();
+                            String formatDate = "dd-MM-yyyy";
+                            String formatTime =  "HH:mm:ss";
+                            // convert date to format
+                            final SimpleDateFormat dateString = new SimpleDateFormat(formatDate);
+                            // convert time
+                            final SimpleDateFormat timeString = new SimpleDateFormat(formatTime);
+                            final String date = dateString.format(new Date(dateInMillis));
+                            final String time = timeString.format(new Date(dateInMillis));
+
                             timerHandler.removeCallbacks(timerRunnable);
-                            timeButton.setText("start");
+                            // update child table status
                             myDB.updateRow(inID, cursor.getString(1), cursor.getString(2), cursor.getString(3), "Incomplete");
+                            // update session table row
+                            Cursor cursor = mySessionDB.getLastRow();
+                            mySessionDB.updateInCompleteSession(cursor.getInt(0), time, interval.getText().toString(), flag.getText().toString(), "Incomplete");
+                           // mySessionDB.updateRow(inID, "Completed", String.valueOf(sessionCount), "date");
                             status.setText("  Current status: Incomplete");
-                        } else {
-                            // start timer, update status and get new status
+                            timeButton.setText("Reset");
+                            tvStartTime.setText("  Session stopped at: " + time);
+                            flag.setEnabled(false);
+
+                        } else if (timeButton.getText().equals("Start")){
+
+                            // date and time code
+                            long dateInMillis = System.currentTimeMillis();
+                            String formatDate = "dd-MM-yyyy";
+                            String formatTime =  "HH:mm:ss";
+                            // convert date to format
+                            final SimpleDateFormat dateString = new SimpleDateFormat(formatDate);
+                            // convert time
+                            final SimpleDateFormat timeString = new SimpleDateFormat(formatTime);
+                            final String date = dateString.format(new Date(dateInMillis));
+                            final String time = timeString.format(new Date(dateInMillis));
+
+                            // start timer, create session
                             startTime = System.currentTimeMillis();
                             timerHandler.postDelayed(timerRunnable, 0);
                             flag.setEnabled(true);
-                            timeButton.setText("Stop");
+                            // update child table status
                             myDB.updateRow(inID, cursor.getString(1), cursor.getString(2), cursor.getString(3), "Incomplete");
+                            // create session row
+                            mySessionDB.insertRow(idRetrieve, venueRetrieve, inspectorRetrieve, "1", priDiRetrieve, secDiRetrieve,
+                                    date, time, "0", "0", "0", childName, "Not observed");
                             status.setText("  Current status: Observing");
-                        }
+                            timeButton.setText("Pause");
+                            tvStartTime.setText("  Session started at: " + time);
 
+                        } else if (timeButton.getText().equals("Reset")){
+                            // start timer, update status and get new status
+                            startTime = System.currentTimeMillis();
+                            timerHandler.postDelayed(timerRunnable, 0);
+                            timeButton.setText("Pause");
+                            flag.setEnabled(true);
+                        }
                     }
         });
         // Back button

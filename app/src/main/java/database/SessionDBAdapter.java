@@ -29,10 +29,19 @@ public class SessionDBAdapter {
      * CHANGE 1:
      */
     // TODO: Setup your fields here:
+    public static final String KEY_CHILDID = "ChildID";
+    public static final String KEY_CENTERID = "CenterID";
+    public static final String KEY_OBSERVER = "Observer";
+    public static final String KEY_SESSIONCOUNT = "SessionCount";
+    public static final String KEY_PRIMARYDI = "PrimaryDi";
+    public static final String KEY_SECONDARYDI = "SecondaryDi";
+    public static final String KEY_DATE = "Date";
+    public static final String KEY_STARTTIME = "StartTime";
+    public static final String KEY_ENDTIME = "EndTime";
+    public static final String KEY_NOINTERVALS = "NoOfIntervals";
+    public static final String KEY_NOFLAGS = "NoOfFlags";
     public static final String KEY_SESSIONCHILDNAME = "SessionChildName";
     public static final String KEY_SESSIONSTATUS = "SessionStatus";
-    public static final String KEY_SESSIONCOUNT = "SessionCount";
-    public static final String KEY_DATETIMETAKEN = "DateTime";
 
     // TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
     public static final int COL_SESSIONCHILDNAME = 1;
@@ -43,13 +52,14 @@ public class SessionDBAdapter {
 
 
 
-    public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_SESSIONCHILDNAME, KEY_SESSIONSTATUS, KEY_SESSIONCOUNT, KEY_DATETIMETAKEN};
+    public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_CHILDID, KEY_CENTERID, KEY_OBSERVER, KEY_SESSIONCOUNT,
+            KEY_PRIMARYDI, KEY_SECONDARYDI, KEY_DATE, KEY_STARTTIME, KEY_ENDTIME, KEY_NOINTERVALS, KEY_NOFLAGS, KEY_SESSIONCHILDNAME, KEY_SESSIONSTATUS};
 
     // DB info: it's name, and the table we are using (just one).
     public static final String DATABASE_NAME = "MySessionDb";
     public static final String DATABASE_TABLE = "ChildSessionTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_CREATE_SQL =
             "create table " + DATABASE_TABLE
@@ -65,10 +75,19 @@ public class SessionDBAdapter {
                     //		(http://www.sqlite.org/datatype3.html)
                     //  - "not null" means it is a required field (must be given a value).
                     // NOTE: All must be comma separated (end of line!) Last one must have NO comma!!
-                    + KEY_SESSIONCHILDNAME + " text not null, "
-                    + KEY_SESSIONSTATUS + " text not null, "
+                    + KEY_CHILDID + " text not null, "
+                    + KEY_CENTERID + " text not null, "
+                    + KEY_OBSERVER + " text not null, "
                     + KEY_SESSIONCOUNT + " text not null, "
-                    + KEY_DATETIMETAKEN + " text "
+                    + KEY_PRIMARYDI + " text not null, "
+                    + KEY_SECONDARYDI + " text not null, "
+                    + KEY_DATE + " text not null, "
+                    + KEY_STARTTIME + " text not null, "
+                    + KEY_ENDTIME + " text not null, "
+                    + KEY_NOINTERVALS + " text not null, "
+                    + KEY_NOFLAGS + " text not null, "
+                    + KEY_SESSIONCHILDNAME + " text not null, "
+                    + KEY_SESSIONSTATUS + " text "
 
 
                     // Rest  of creation:
@@ -101,7 +120,8 @@ public class SessionDBAdapter {
     }
 
     // Add a new set of values to the database.
-    public long insertRow(String sessionChildName , String sessionStatus,  String sessionCount, String sessionDateTime) {
+    public long insertRow(String childID, String centerID, String observer, String sessionCount, String primaryDI, String secondaryDI,
+                          String date, String startTime, String endTime, String noOfIntervals, String noOfFlags, String sessionChildName, String sessionStatus) {
 		/*
 		 * CHANGE 3:
 		 */
@@ -109,12 +129,19 @@ public class SessionDBAdapter {
         // TODO: Also change the function's arguments to be what you need!
         // Create row's data:
         ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_CHILDID, childID);
+        initialValues.put(KEY_CENTERID, centerID);
+        initialValues.put(KEY_OBSERVER, observer);
+        initialValues.put(KEY_SESSIONCOUNT, sessionCount);
+        initialValues.put(KEY_PRIMARYDI, primaryDI);
+        initialValues.put(KEY_SECONDARYDI, secondaryDI);
+        initialValues.put(KEY_DATE, date);
+        initialValues.put(KEY_STARTTIME, startTime);
+        initialValues.put(KEY_ENDTIME, endTime);
+        initialValues.put(KEY_NOINTERVALS, noOfIntervals);
+        initialValues.put(KEY_NOFLAGS, noOfFlags);
         initialValues.put(KEY_SESSIONCHILDNAME, sessionChildName);
         initialValues.put(KEY_SESSIONSTATUS, sessionStatus);
-        initialValues.put(KEY_SESSIONCOUNT, sessionCount);
-        initialValues.put(KEY_DATETIMETAKEN, sessionDateTime);
-
-
 
         // Insert it into the database.
         return db.insert(DATABASE_TABLE, null, initialValues);
@@ -159,8 +186,17 @@ public class SessionDBAdapter {
         return c;
     }
 
+    // get last row
+    public Cursor getLastRow() {
+        Cursor c = 	db.query(DATABASE_TABLE, ALL_KEYS,null, null, null, null, null);
+        if (c != null) {
+            c.moveToLast();
+        }
+        return c;
+    }
+
     // Change an existing row to be equal to new data.
-    public boolean updateRow(long rowId, String sessionStatus, String sessionCount, String sessionDateTime) {
+    public boolean updateInCompleteSession(long rowId, String endTime, String noOfIntervals, String noOfFlags, String sessionStatus) {
         String where = KEY_ROWID + "=" + rowId;
 
 		/*
@@ -170,12 +206,11 @@ public class SessionDBAdapter {
         // TODO: Also change the function's arguments to be what you need!
         // Create row's data:
         ContentValues newValues = new ContentValues();
+        newValues.put(KEY_ENDTIME, endTime);
+        newValues.put(KEY_NOINTERVALS, noOfIntervals);
+        newValues.put(KEY_NOFLAGS, noOfFlags);
         newValues.put(KEY_SESSIONSTATUS, sessionStatus);
-        newValues.put(KEY_SESSIONCOUNT, sessionCount);
-        newValues.put(KEY_DATETIMETAKEN, sessionDateTime);
-
-
-
+       // newValues.put(KEY_DATETIMETAKEN, sessionDateTime);
 
         // Insert it into the database.
         return db.update(DATABASE_TABLE, newValues, where, null) != 0;

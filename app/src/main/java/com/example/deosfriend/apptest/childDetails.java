@@ -121,7 +121,7 @@ public class childDetails extends ActionBarActivity {
         childVenue.setText(cursor.getString(7));
         childActivity.setText(cursor.getString(8));
         childNoAdults.setText("No. of Adults:     " + cursor.getString(9));
-        childNoChildren.setText("No. of Children: " + cursor.getString(10));
+        childNoChildren.setText("No. of Children:  " + cursor.getString(10));
 
         childName4 = cursor.getString(1);
 
