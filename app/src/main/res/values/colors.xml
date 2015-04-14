@@ -2,4 +2,6 @@
 <resources>
     <color name="colorHighlight">#B6B6B6</color>
     <color name="my_spinner_text_color">#FAFAFA</color>
+    <color name="buttonNotPressed">#2196F3</color>
+    <color name="buttonPressed">#1976D2</color>
 </resources>

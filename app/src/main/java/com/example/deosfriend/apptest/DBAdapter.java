@@ -52,7 +52,8 @@ public class DBAdapter {
 
 
 	
-	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_CHILDNAME, KEY_GENDER, KEY_PRIDI, KEY_SECDI, KEY_REMARKS, KEY_INSPECTOR, KEY_VENUE, KEY_ACTIVITY, KEY_NOADULTS, KEY_NOCHILDREN, KEY_IMAGE, KEY_STATUS, KEY_SESSIONNO};
+	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_CHILDNAME, KEY_GENDER, KEY_PRIDI, KEY_SECDI, KEY_REMARKS,
+            KEY_INSPECTOR, KEY_VENUE, KEY_ACTIVITY, KEY_NOADULTS, KEY_NOCHILDREN, KEY_IMAGE, KEY_STATUS, KEY_SESSIONNO};
 	
 	// DB info: it's name, and the table we are using (just one).
 	public static final String DATABASE_NAME = "MyDb";
@@ -208,26 +209,41 @@ public class DBAdapter {
 	}
 	
 	// Change an existing row to be equal to new data.
-	public boolean updateRow(long rowId, String childName, String priDi, String gender, String status) {
-		String where = KEY_ROWID + "=" + rowId;
+	public boolean updateRow(long rowId, String status) {
+        String where = KEY_ROWID + "=" + rowId;
 
 		/*
 		 * CHANGE 4:
 		 */
-		// TODO: Update data in the row with new fields.
-		// TODO: Also change the function's arguments to be what you need!
-		// Create row's data:
-		ContentValues newValues = new ContentValues();
-		newValues.put(KEY_CHILDNAME, childName);
-		newValues.put(KEY_PRIDI, priDi);
-        newValues.put(KEY_GENDER, gender);
+        // TODO: Update data in the row with new fields.
+        // TODO: Also change the function's arguments to be what you need!
+        // Create row's data:
+        ContentValues newValues = new ContentValues();
         newValues.put(KEY_STATUS, status);
 
-		
-		// Insert it into the database.
-		return db.update(DATABASE_TABLE, newValues, where, null) != 0;
-	}
-	
+
+
+        // Insert it into the database.
+        return db.update(DATABASE_TABLE, newValues, where, null) != 0;
+    }
+
+    public boolean updateSessionNo(long rowId, String sessionStatus, int sessionNo) {
+        String where = KEY_ROWID + "=" + rowId;
+
+		/*
+		 * CHANGE 4:
+		 */
+        // TODO: Update data in the row with new fields.
+        // TODO: Also change the function's arguments to be what you need!
+        // Create row's data:
+        ContentValues newValues = new ContentValues();
+        newValues.put(KEY_STATUS, sessionStatus);
+        newValues.put(KEY_SESSIONNO, sessionNo);
+
+
+        // Insert it into the database.
+        return db.update(DATABASE_TABLE, newValues, where, null) != 0;
+    }
 	
 	
 	/////////////////////////////////////////////////////////////////////

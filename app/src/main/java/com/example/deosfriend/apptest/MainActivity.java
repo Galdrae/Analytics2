@@ -93,9 +93,6 @@ public class MainActivity extends ActionBarActivity {
                 }
         );
 
-        testTimer = (TextView) findViewById(R.id.testTimer);
-    //    testTimer.setText(String.valueOf(dateString));
-
         create = (Button) findViewById(R.id.btnCreate);
         view = (Button) findViewById(R.id.btnView);
 
@@ -177,7 +174,7 @@ public class MainActivity extends ActionBarActivity {
         if (errorMsg == "" && female.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
-                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 1);
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 0);
 
             Cursor cursor = myDB.getRow(newID);
             Message.message(this, "Female Child added");
@@ -188,7 +185,7 @@ public class MainActivity extends ActionBarActivity {
         if (errorMsg == "" && male.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
-                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 1);
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 0);
 
             Cursor cursor = myDB.getRow(newID);
             Message.message(this, "Male Child added");
