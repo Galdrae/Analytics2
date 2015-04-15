@@ -13,6 +13,7 @@
         <activity
             android:name=".ListView_Database"
             android:label=""
+
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

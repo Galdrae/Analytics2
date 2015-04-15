@@ -59,7 +59,7 @@ public class DBAdapter {
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "ChildTable";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 11;
+	public static final int DATABASE_VERSION = 12;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 

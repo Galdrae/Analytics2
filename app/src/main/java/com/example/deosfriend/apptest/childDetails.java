@@ -189,8 +189,6 @@ public class childDetails extends ActionBarActivity {
         });
 
         // start - view
-        btnEdit = (Button) findViewById(R.id.button4);
-        btnDelete = (Button) findViewById(R.id.button3);
         RSQ1View = (TextView) findViewById(R.id.textView62);
         RSQ2View = (TextView) findViewById(R.id.textView72);
         RSQ3View = (TextView) findViewById(R.id.textView82);

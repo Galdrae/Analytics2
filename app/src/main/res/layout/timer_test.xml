@@ -92,7 +92,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginRight="20dp"
-                    android:background="#2196F3"
+                    android:height="60dp"
+                    android:width="90dp"
+                    android:background="@drawable/button_selector"
                     android:text="Start"
                     android:textColor="#ffffffff" />
 
@@ -102,6 +104,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#EF5350"
+                    android:height="60dp"
+                    android:width="90dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:text="Flag Count: 0"
@@ -119,7 +123,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="310dp"
         android:paddingRight="10dp">
 
         <!-- Top CardView -->
@@ -164,19 +168,20 @@
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_row="1"
-                    android:background="#2196F3"
+                    android:background="@drawable/button_selector"
                     android:padding="5dp"
                     android:text="Active Engagement"
                     android:onClick="aeOnClick"
-                    android:textColor="#ffffffff" />
+                    android:textColor="#ffffffff"
+                    />
 
                 <Button
                     android:id="@+id/btnANE"
-                    android:layout_width="200dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="2"
                     android:layout_row="1"
-                    android:background="#2196F3"
+                    android:background="@drawable/button_selector"
                     android:padding="5dp"
                     android:text="Active Non Engagement"
                     android:textColor="#ffffffff"
@@ -188,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_row="2"
-                    android:background="#2196F3"
+                    android:background="@drawable/button_selector"
                     android:padding="5dp"
                     android:text="Passive Engagement"
                     android:textColor="#ffffffff"
@@ -196,11 +201,11 @@
 
                 <Button
                     android:id="@+id/btnPNE"
-                    android:layout_width="200dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="2"
                     android:layout_row="2"
-                    android:background="#2196F3"
+                    android:background="@drawable/button_selector"
                     android:padding="5dp"
                     android:text="Passive Non Engagement"
                     android:textColor="#ffffffff"
@@ -256,8 +261,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="580dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="600dp"
         android:orientation="horizontal"
         android:paddingRight="10dp">
 
@@ -334,7 +339,9 @@
                     android:id="@+id/btnBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#2196F3"
+                    android:height="60dp"
+                    android:width="90dp"
+                    android:background="@drawable/button_selector"
                     android:onClick="onClick_Back"
                     android:text="Back"
                     android:textColor="#ffffffff" />
@@ -343,7 +350,9 @@
                     android:id="@+id/btnTest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#2196F3"
+                    android:height="60dp"
+                    android:width="90dp"
+                    android:background="@drawable/button_selector"
                     android:onClick="onClick_Test"
                     android:text="Test"
                     android:textColor="#ffffffff"

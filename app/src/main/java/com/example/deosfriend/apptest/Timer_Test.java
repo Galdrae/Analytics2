@@ -293,10 +293,9 @@ public class Timer_Test extends ActionBarActivity {
         // set text
         id.setText(childID);
         passName.setText(childName);
-        status.setText("  Current status: " + cursor.getString(12));
-        child.setText("  Currently observing: " + childName);
-        session.setText("  Session number: ");
-        tvStartTime.setText("  Session started at: ");
+        status.setText("Current status: " + cursor.getString(12));
+        child.setText("Currently observing: " + childName);
+        tvStartTime.setText("Session started at: ");
 
         // The start button
         timeButton.setOnClickListener(
@@ -323,9 +322,9 @@ public class Timer_Test extends ActionBarActivity {
                             Cursor cursor = mySessionDB.getLastRow();
                             mySessionDB.updateInCompleteSession(cursor.getInt(0), time, interval.getText().toString(), flag.getText().toString(), "Incomplete");
                             // mySessionDB.updateRow(inID, "Completed", String.valueOf(sessionCount), "date");
-                            status.setText("  Current status: Incomplete");
+                            status.setText("  Current status: Paused");
                             timeButton.setText("Reset");
-                            tvStartTime.setText("  Session stopped at: " + time);
+                            //tvStartTime.setText("  Session stopped at: " + time);
                             flag.setEnabled(false);
 
                         } else if (timeButton.getText().equals("Start")) {
@@ -352,15 +351,17 @@ public class Timer_Test extends ActionBarActivity {
                             // create session row
                             mySessionDB.insertRow(idRetrieve, venueRetrieve, inspectorRetrieve, String.valueOf(sessionNo), priDiRetrieve, secDiRetrieve,
                                     date, time, "0", "0", "0", childName, "Incomplete");
-                            status.setText("  Current status: Observing");
+                            status.setText("Current status: Observing");
                             timeButton.setText("Pause");
-                            tvStartTime.setText("  Session started at: " + time);
+                            tvStartTime.setText("Session started at: " + time);
+                            session.setText("Session number: " + cursor.getString(13));
 
                         } else if (timeButton.getText().equals("Reset")) {
                             // start timer, update status and get new status
                             startTime = System.currentTimeMillis();
                             timerHandler.postDelayed(timerRunnable, 0);
                             timeButton.setText("Pause");
+                            status.setText(" Current status: Observing");
                             flag.setEnabled(true);
                         }
                     }
@@ -384,18 +385,18 @@ public class Timer_Test extends ActionBarActivity {
                         Cursor cursor = mySessionDB.getLastRow();
 
                                 message += "ID: " + cursor.getInt(0)
-                                        + "\n, Child ID: " + cursor.getString(2)
-                                        + "\n, Session Number: " + cursor.getString(4)
-                                        + "\n, Date: " + cursor.getString(7)
-                                        + "\n, Start Time: " + cursor.getString(8)
-                                        + "\n, End Time: " + cursor.getString(9)
-                                        + "\n, No. of Intervals: " + cursor.getString(10)
-                                        + "\n, No. of flags: " + cursor.getString(11)
-                                        + "\n, Child name: " + cursor.getString(12)
-                                        + "\n, Session Status: " + cursor.getString(13)
+                                        + "\n Child ID: " + cursor.getString(1)
+                                        + "\n Session Number: " + cursor.getString(4)
+                                        + "\n Date: " + cursor.getString(7)
+                                        + "\n Start Time: " + cursor.getString(8)
+                                        + "\n End Time: " + cursor.getString(9)
+                                        + "\n No. of Intervals: " + cursor.getString(10)
+                                        + "\n No. of flags: " + cursor.getString(11)
+                                        + "\n Child name: " + cursor.getString(12)
+                                        + "\n Session Status: " + cursor.getString(13)
                                         + "\n";
 
-                        for (int i=0; i < 5; i++) {
+                        for (int i=0; i < 3; i++) {
                             Toast.makeText(Timer_Test.this, message, Toast.LENGTH_LONG).show();
                         }
                     }

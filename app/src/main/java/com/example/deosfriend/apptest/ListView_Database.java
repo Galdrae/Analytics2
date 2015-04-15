@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -35,12 +36,25 @@ public class ListView_Database extends ActionBarActivity{
     TextView name, age, status;
     DBAdapter myDB;
     Button View;
+   /* ImageButton FAB;*/
 
     private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview_layout_db_appbar);
+
+
+/*        //  FAB - Floating Action Button
+        FAB = (ImageButton) findViewById(R.id.imageButton);
+        FAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Toast.makeText(MainActivity.this,"Hello World", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(ListView_Database.this,MainActivity.class);
+                startActivity(i);
+            }
+        });*/
 
         // Action/tool bar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -127,7 +141,7 @@ public class ListView_Database extends ActionBarActivity{
         startManagingCursor(cursor);
 
         String[] fromFieldNames = new String[]
-                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_PRIDI, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS};
+                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_SESSIONNO, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS};
         int[] toViewIDs = new int[]
                 {R.id.tvName_Db, R.id.tvAge_Db, R.id.lv_Image, R.id.tvStatus};
 
@@ -153,7 +167,7 @@ public class ListView_Database extends ActionBarActivity{
         startManagingCursor(cursor);
 
         String[] fromFieldNames = new String[]
-                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_PRIDI, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS};
+                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_SESSIONNO, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS};
         int[] toViewIDs = new int[]
                 {R.id.tvName_Db, R.id.tvAge_Db, R.id.lv_Image, R.id.tvStatus};
 
@@ -179,7 +193,7 @@ public class ListView_Database extends ActionBarActivity{
         startManagingCursor(cursor);
 
         String[] fromFieldNames = new String[]
-                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_PRIDI, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS};
+                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_SESSIONNO, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS};
         int[] toViewIDs = new int[]
                 {R.id.tvName_Db, R.id.tvAge_Db, R.id.lv_Image, R.id.tvStatus};
 
