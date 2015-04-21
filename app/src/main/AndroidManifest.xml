@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.deosfriend.apptest">
+    package="com.example.deosfriend.design">
 
     <uses-sdk
         android:minSdkVersion="21"
@@ -11,7 +11,7 @@
         android:label=" Child Observation"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ListView_Database"
+            android:name="com.example.deosfriend.design.ListView_Database"
             android:label=""
 
             android:screenOrientation="portrait">
@@ -22,14 +22,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.deosfriend.design.MainActivity"
             android:screenOrientation="portrait"
             android:label="Child Form"></activity>
         <activity
-            android:name=".childDetails"
+            android:name="com.example.deosfriend.design.childDetails"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".Timer_Test"
+            android:name="com.example.deosfriend.design.Timer_Test"
             android:screenOrientation="portrait"></activity>
 
     </application>

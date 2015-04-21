@@ -1,17 +1,14 @@
-package com.example.deosfriend.apptest;
+package com.example.deosfriend.design;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,22 +61,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         @Override
         public void onClick(View v) {
             if ( getPosition() == 0 ){
-                Intent myIntent = new Intent(v.getContext(), MainActivity.class);
-                v.getContext().startActivity(myIntent);
-            }
-            if ( getPosition() == 1 ){
                 String sortBy = "Incomplete";
                 Intent myIntent = new Intent(v.getContext(), ListView_Database.class);
                 myIntent.putExtra("SortBy", sortBy);
                 v.getContext().startActivity(myIntent);
             }
-            if ( getPosition() == 2 ){
+            if ( getPosition() == 1 ){
                 String sortBy = "Completed";
                 Intent myIntent = new Intent(v.getContext(), ListView_Database.class);
                 myIntent.putExtra("SortBy", sortBy);
                 v.getContext().startActivity(myIntent);
             }
-            if ( getPosition() == 3 ){
+            if ( getPosition() == 2 ){
                 Intent myIntent = new Intent(v.getContext(), ListView_Database.class);
                 v.getContext().startActivity(myIntent);
             }

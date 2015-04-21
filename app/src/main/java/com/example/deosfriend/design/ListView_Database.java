@@ -1,13 +1,10 @@
-package com.example.deosfriend.apptest;
+package com.example.deosfriend.design;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,16 +14,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
 
-
-import org.w3c.dom.Text;
 
 import Controller.Message;
+import database.DBAdapter;
 
 /**
  * Created by Deo's Friend on 3/14/2015.
@@ -36,7 +28,7 @@ public class ListView_Database extends ActionBarActivity{
     TextView name, age, status;
     DBAdapter myDB;
     Button View;
-   /* ImageButton FAB;*/
+    ImageButton FAB;
 
     private Toolbar toolbar;
     @Override
@@ -45,7 +37,7 @@ public class ListView_Database extends ActionBarActivity{
         setContentView(R.layout.listview_layout_db_appbar);
 
 
-/*        //  FAB - Floating Action Button
+       //  FAB - Floating Action Button
         FAB = (ImageButton) findViewById(R.id.imageButton);
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +46,7 @@ public class ListView_Database extends ActionBarActivity{
                 Intent i = new Intent(ListView_Database.this,MainActivity.class);
                 startActivity(i);
             }
-        });*/
+        });
 
         // Action/tool bar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -236,7 +228,7 @@ public class ListView_Database extends ActionBarActivity{
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -250,5 +242,5 @@ public class ListView_Database extends ActionBarActivity{
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

@@ -1,4 +1,4 @@
-package com.example.deosfriend.apptest;
+package com.example.deosfriend.design;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,16 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 import Controller.Message;
+import database.DBAdapter;
 import database.SessionDBAdapter;
 
 
@@ -28,6 +25,7 @@ public class MainActivity extends ActionBarActivity {
     Button create, view;
     TextView inName, inPriDi, inSecDi, inRemarks, inInspector, inNoAdults, inNoChildren, testTimer;
     RadioButton male, female;
+    CheckBox cbSession1, cbSession2, cbSession3, cbSession4;
 
     Spinner spinnerDDVenue;
     Spinner spinnerDDActivity;
@@ -135,6 +133,10 @@ public class MainActivity extends ActionBarActivity {
         inNoChildren = (TextView) findViewById(R.id.tbNoChildren);
         female = (RadioButton) findViewById(R.id.rbFemale);
         male = (RadioButton) findViewById(R.id.rbMale);
+        cbSession1 = (CheckBox) findViewById(R.id.cbSession1);
+        cbSession2 = (CheckBox) findViewById(R.id.cbSession2);
+        cbSession3 = (CheckBox) findViewById(R.id.cbSession3);
+        cbSession4 = (CheckBox) findViewById(R.id.cbSession4);
 
         String name = inName.getText().toString();
         String priDi = inPriDi.getText().toString();
@@ -171,29 +173,52 @@ public class MainActivity extends ActionBarActivity {
         //===================================================================
 
         // if all fields are filled
-        if (errorMsg == "" && female.isChecked()) {
+        if (errorMsg == "" && female.isChecked() && cbSession1.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
-                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 0);
-
-            Cursor cursor = myDB.getRow(newID);
-            Message.message(this, "Female Child added");
-            //displayRecordSet(cursor);
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 1);
+/*            Message.message(this, "Female Child added");
+            displayRecordSet(cursor);*/
+        }
+        if (errorMsg == "" && male.isChecked() && cbSession1.isChecked()) {
+            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 1);
+        }
+        if (errorMsg == "" && female.isChecked() && cbSession2.isChecked()) {
+            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 2);
+        }
+        if (errorMsg == "" && male.isChecked() && cbSession2.isChecked()) {
+            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 2);
+        }
+        if (errorMsg == "" && female.isChecked() && cbSession3.isChecked()) {
+            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 3);
+        }
+        if (errorMsg == "" && male.isChecked() && cbSession3.isChecked()) {
+            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 3);
+        }
+        if (errorMsg == "" && female.isChecked() && cbSession4.isChecked()) {
+            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 4);
+        }
+        if (errorMsg == "" && male.isChecked() && cbSession4.isChecked()) {
+            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 4);
+        }
+        if ( errorMsg == "" ) {
             Intent intent = new Intent(MainActivity.this, ListView_Database.class);
             MainActivity.this.startActivity(intent);
         }
-        if (errorMsg == "" && male.isChecked()) {
-            long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
-                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
-                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 0);
-
-            Cursor cursor = myDB.getRow(newID);
-            Message.message(this, "Male Child added");
-            // displayRecordSet(cursor);
-            Intent intent = new Intent(MainActivity.this, ListView_Database.class);
-            MainActivity.this.startActivity(intent);
-        }
-
     }
 
     // View Database
@@ -266,7 +291,7 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -279,6 +304,6 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 }

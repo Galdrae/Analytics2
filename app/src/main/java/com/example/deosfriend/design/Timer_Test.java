@@ -1,13 +1,9 @@
-package com.example.deosfriend.apptest;
+package com.example.deosfriend.design;
 
-import android.app.Activity;
-import android.app.ActivityGroup;
-import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -15,16 +11,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TabHost;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Timer;
 
-import Controller.Message;
+import database.DBAdapter;
+import database.IntervalDBAdapter;
 import database.SessionDBAdapter;
 
 /**
@@ -34,9 +30,12 @@ public class Timer_Test extends ActionBarActivity {
 
     Button buttonStart, flag, back, timeButton, activeEn, activeNon, passiveEn, passiveNon, test;
     TextView timerTextView, tvTest, interval, child, status, id, session, passName, tvStartTime;
+    CheckBox cbAdults, cbPeers, cbMaterials, cbNoneOther;
 
     DBAdapter myDB;
     SessionDBAdapter mySessionDB;
+    IntervalDBAdapter myIntervalDB;
+
     private Toolbar toolbar;
 
     private int minutes; // will be widely used across 2-3 different
@@ -56,8 +55,12 @@ public class Timer_Test extends ActionBarActivity {
     private long millisec = 0L;
 
     private int intervalCount = 0;
-    int flagCount = 0;
-    String engagement="";
+    private int flagCount = 0;
+    private String engagement="";
+    private String adults="Null", peers="Null", materials="Null", noneOther="Null";
+    private String childName, childId;
+    private long childID;
+    int sessionNo;
 
     // runs without a timer by reposting this handler at the end of the runnable
     public int[] getTimeValues(long time) {
@@ -135,7 +138,7 @@ public class Timer_Test extends ActionBarActivity {
                                 flag.setText("Flag Count: " + flagCount);
                                 startTime = System.currentTimeMillis();
                                 timerHandler.postDelayed(timerRunnable, 0);
-
+                                myIntervalDB.insertRow(interval.getText().toString(), engagement, adults, peers, materials, noneOther, childID, childName, sessionNo, "Flagged!");
                             } else if (flagCount >= 9) { // if flag count reaches 10, terminate session
 
                                 timerHandler.removeCallbacks(timerRunnable);
@@ -146,13 +149,13 @@ public class Timer_Test extends ActionBarActivity {
                                 final SimpleDateFormat timeString = new SimpleDateFormat(formatTime);
                                 final String time = timeString.format(new Date(dateInMillis));
                                 // update status to failed!
-                                String childID = id.getText().toString();
-                                final Long inID = Long.parseLong(childID);
                                 Cursor lastRowID = mySessionDB.getLastRow();
-                                myDB.updateRow(inID, "Fail");
+                                myDB.updateRow(childID, "Fail");
                                 mySessionDB.updateInCompleteSession(lastRowID.getInt(0), time, interval.getText().toString(), "Flag Count: 10", "Fail");
+                                // insert flagged row to interval table
+                                myIntervalDB.insertRow(interval.getText().toString(), engagement, adults, peers, materials, noneOther, childID, childName, sessionNo, "Flagged!");
                                 //  text changes
-                                status.setText("  Current status: Fail!");
+                                status.setText("Current status: Fail!");
                                 flag.setText("Flag Count: " + 10);
                                 buttonStart.setText("End");
                                 timerTextView.setText(("End of Session"));
@@ -168,8 +171,6 @@ public class Timer_Test extends ActionBarActivity {
             //  if reach 15s of the interval
             if (updateTime >= fithteenSecsLimit) {
 
-                String childID = id.getText().toString();
-                final Long inID = Long.parseLong(childID);
                 Cursor lastRowID = mySessionDB.getLastRow();
 
                 int count = intervalCount = intervalCount + 1;
@@ -182,14 +183,14 @@ public class Timer_Test extends ActionBarActivity {
                     // convert time
                     final SimpleDateFormat timeString = new SimpleDateFormat(formatTime);
                     final String time = timeString.format(new Date(dateInMillis));
-
                     // child table codes
-
-                    myDB.updateRow(inID, "Completed");
+                    myDB.updateRow(childID, "Completed");
+                    // session update
                     mySessionDB.updateInCompleteSession(lastRowID.getInt(0), time, "Interval: 5", flag.getText().toString(), "Completed");
-
+                    // add last interval row
+                    myIntervalDB.insertRow("Interval: 5", engagement, adults, peers, materials, noneOther, childID, childName, sessionNo, "Null");
                     // text changes
-                    status.setText("  Current status: Completed");
+                    status.setText("Current status: Completed");
                     interval.setText("Interval: " + (count) + " x 15s");
                     timerTextView.setText(("End of Session"));
                     tvTest.setText("");
@@ -200,9 +201,27 @@ public class Timer_Test extends ActionBarActivity {
 
                 } else { // if haven't reach maximun interval, continue and add interval count
 
-                    interval.setText("Interval: " + count);
+                    // The checkbox buttons
+                    if (cbMaterials.isChecked())
+                        materials = "Yes";
+                    else
+                        materials = "Null";
+                    if (cbPeers.isChecked())
+                        peers = "Yes";
+                    else
+                        peers = "Null";
+                    if (cbAdults.isChecked())
+                        adults = "Yes";
+                    else
+                        adults = "Null";
+                    if (cbNoneOther.isChecked())
+                        noneOther = "Yes";
+                    else
+                        noneOther = "Null";
 
+                    interval.setText("Interval: " + (count));
                     mySessionDB.updateInCompleteSession(lastRowID.getInt(0), "SessionOnGoing", interval.getText().toString(), flag.getText().toString(), "Incomplete");
+                    myIntervalDB.insertRow(interval.getText().toString(), engagement, adults, peers, materials, noneOther, childID, childName, sessionNo, "Null");
 
                     startTime = System.currentTimeMillis();
                     timerHandler.postDelayed(timerRunnable, 0);
@@ -215,6 +234,7 @@ public class Timer_Test extends ActionBarActivity {
                     timerTextView.setText(String.format("%d:%02d", minutes, seconds));
                     tvTest.setText("");
 
+                    alarm.vibrate(500);
                 }
             }
         }
@@ -231,6 +251,7 @@ public class Timer_Test extends ActionBarActivity {
 
         openDB();
         openSessionDB();
+        openIntervalDB();
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
@@ -267,6 +288,11 @@ public class Timer_Test extends ActionBarActivity {
         passiveEn = (Button) findViewById(R.id.btnPE);
         passiveNon = (Button) findViewById(R.id.btnPNE);
 
+        cbAdults = (CheckBox) findViewById(R.id.cbAdults);
+        cbPeers = (CheckBox) findViewById(R.id.cbPeers);
+        cbMaterials = (CheckBox) findViewById(R.id.cbMaterials);
+        cbNoneOther = (CheckBox) findViewById(R.id.cbNoneOther);
+
         flag.setEnabled(false);
         alarm = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -275,27 +301,26 @@ public class Timer_Test extends ActionBarActivity {
         timeButton.setText("Start");
 
         // Extract variable pass from previous activity
-        final String childID = getIntent().getExtras().getString("childID");
-        final String childName = getIntent().getExtras().getString("childName");
+        childId = getIntent().getExtras().getString("childID");
+        childName = getIntent().getExtras().getString("childName");
 
-        final Long inID = Long.parseLong(childID);
+        childID = Long.parseLong(childId);
+        final Long inID = Long.parseLong(childId);
         final Cursor cursor = myDB.getRow(inID);
         final Cursor cursor2 = mySessionDB.getRow(inID);
 
         // Child Table datas
         final String idRetrieve = cursor.getString(0);
-        String nameRetrieve = cursor.getString(1);
-        final String priDiRetrieve = cursor.getString(3);
-        final String secDiRetrieve = cursor.getString(4);
+        sessionNo = cursor.getInt(13);
         final String inspectorRetrieve = cursor.getString(6);
         final String venueRetrieve = cursor.getString(7);
 
         // set text
-        id.setText(childID);
+        id.setText(childId);
         passName.setText(childName);
         status.setText("Current status: " + cursor.getString(12));
         child.setText("Currently observing: " + childName);
-        tvStartTime.setText("Session started at: ");
+        session.setText("Session Number: " + sessionNo);
 
         // The start button
         timeButton.setOnClickListener(
@@ -341,27 +366,26 @@ public class Timer_Test extends ActionBarActivity {
                             final String time = timeString.format(new Date(dateInMillis));
 
                             // start timer, create session
+                            alarm.vibrate(500);
                             startTime = System.currentTimeMillis();
                             timerHandler.postDelayed(timerRunnable, 0);
                             flag.setEnabled(true);
-                            int sessionNo = cursor.getInt(13);
-                            sessionNo = sessionNo + 1;
                             // update child table status
-                            myDB.updateSessionNo(inID, "Incomplete", sessionNo);
+                            myDB.updateSessionNo(inID, "Incomplete");
                             // create session row
-                            mySessionDB.insertRow(idRetrieve, venueRetrieve, inspectorRetrieve, String.valueOf(sessionNo), priDiRetrieve, secDiRetrieve,
+                            mySessionDB.insertRow(idRetrieve, venueRetrieve, inspectorRetrieve, String.valueOf(sessionNo),
                                     date, time, "0", "0", "0", childName, "Incomplete");
                             status.setText("Current status: Observing");
                             timeButton.setText("Pause");
-                            tvStartTime.setText("Session started at: " + time);
-                            session.setText("Session number: " + cursor.getString(13));
+                            tvStartTime.setText("Start Time: " + time);
+                            session.setText("Session number: " + sessionNo);
 
                         } else if (timeButton.getText().equals("Reset")) {
                             // start timer, update status and get new status
                             startTime = System.currentTimeMillis();
                             timerHandler.postDelayed(timerRunnable, 0);
                             timeButton.setText("Pause");
-                            status.setText(" Current status: Observing");
+                            status.setText("Current status: Observing");
                             flag.setEnabled(true);
                         }
                     }
@@ -371,7 +395,7 @@ public class Timer_Test extends ActionBarActivity {
                 new View.OnClickListener() {
                     public void onClick(View v) {
                         Intent intent = new Intent(Timer_Test.this, childDetails.class);
-                        intent.putExtra("childID", childID);
+                        intent.putExtra("childID", childId);
                         Timer_Test.this.startActivity(intent);
                     }
                 }
@@ -403,7 +427,8 @@ public class Timer_Test extends ActionBarActivity {
                 }
         );
 
-        // The engagement buttons and checkbox
+
+        // The engagement buttons
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -462,8 +487,15 @@ public class Timer_Test extends ActionBarActivity {
         mySessionDB.open();
     }
 
+    public void openIntervalDB(){
+        myIntervalDB = new IntervalDBAdapter(this);
+        myIntervalDB.open();
+    }
+
     public void closeDB() {
         myDB.close();
+        mySessionDB.close();
+        myIntervalDB.close();
     }
 
     @Override

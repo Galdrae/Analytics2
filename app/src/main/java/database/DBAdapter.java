@@ -1,7 +1,7 @@
 // ------------------------------------ DBADapter.java ---------------------------------------------
 
 // TODO: Change the package to match your project.
-package com.example.deosfriend.apptest;
+package database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -227,7 +227,7 @@ public class DBAdapter {
         return db.update(DATABASE_TABLE, newValues, where, null) != 0;
     }
 
-    public boolean updateSessionNo(long rowId, String sessionStatus, int sessionNo) {
+    public boolean updateSessionNo(long rowId, String sessionStatus) {
         String where = KEY_ROWID + "=" + rowId;
 
 		/*
@@ -238,8 +238,6 @@ public class DBAdapter {
         // Create row's data:
         ContentValues newValues = new ContentValues();
         newValues.put(KEY_STATUS, sessionStatus);
-        newValues.put(KEY_SESSIONNO, sessionNo);
-
 
         // Insert it into the database.
         return db.update(DATABASE_TABLE, newValues, where, null) != 0;

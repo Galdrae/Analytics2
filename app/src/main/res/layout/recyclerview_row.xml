@@ -15,6 +15,7 @@
         android:layout_height="50dp"
         android:src="@drawable/home"
         android:layout_gravity="center_vertical"/>
+
     <TextView
         android:layout_gravity="center_vertical"
         android:fontFamily="roboto-light"
@@ -23,7 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dummy Text"
-        android:textSize="25sp" />
-
+        android:textSize="25sp"
+        android:textColor="#ff000000"/>
 
 </LinearLayout>
+

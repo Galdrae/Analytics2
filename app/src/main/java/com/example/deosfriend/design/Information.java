@@ -1,4 +1,4 @@
-package com.example.deosfriend.apptest;
+package com.example.deosfriend.design;
 
 /**
  * Created by L335A15 on 3/25/2015.

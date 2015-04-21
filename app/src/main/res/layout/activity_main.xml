@@ -16,14 +16,14 @@
         android:background="#FAFAFA"
         android:orientation="vertical">
 
-<!--        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_view"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#03A9F4"
-            card_view:cardBackgroundColor="#03A9F4">
+        <!--        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="#03A9F4"
+                    card_view:cardBackgroundColor="#03A9F4">
 
-        </android.support.v7.widget.CardView>-->
+                </android.support.v7.widget.CardView>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,21 +90,20 @@
                 android:inputType="text" />
 
             <Spinner
+                android:id="@+id/spinnerVenue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinnerVenue"
                 android:layout_gravity="center_horizontal"
-                android:spinnerMode="dropdown"
                 android:popupBackground="#ffffffff"
-                />
+                android:spinnerMode="dropdown" />
 
             <Spinner
+                android:id="@+id/spinnerActivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinnerActivity"
                 android:layout_gravity="center_horizontal"
-                android:spinnerMode="dropdown"
-                android:popupBackground="#ffffffff"/>
+                android:popupBackground="#ffffffff"
+                android:spinnerMode="dropdown" />
 
             <EditText
                 android:id="@+id/tbNoAdults"
@@ -151,6 +150,45 @@
                 android:onClick="onClick_View"
                 android:text="View"
                 android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cbSession1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Session 1"
+                android:textSize="20sp"/>
+
+            <CheckBox
+                android:id="@+id/cbSession2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Session 2"
+                android:textSize="20sp"/>
+
+            <CheckBox
+                android:id="@+id/cbSession3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Session 3"
+                android:textSize="20sp"/>
+
+            <CheckBox
+                android:id="@+id/cbSession4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Session 4"
+                android:textSize="20sp"/>
 
         </LinearLayout>
 

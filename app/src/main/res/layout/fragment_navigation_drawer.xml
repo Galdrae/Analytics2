@@ -3,29 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context="com.example.deosfriend.apptest.NavigationDrawerFragment">
+    tools:context="com.example.deosfriend.design.NavigationDrawerFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:id="@+id/containerDrawerImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="match_parent"
             android:layout_height="170dp"
             android:layout_marginTop="30dp"
             android:src="@drawable/nav_pic"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp" />-->
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sort"
+            android:textSize="30sp"
+            android:textColor="#ff000000"/>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="20dp"
+            android:background="@android:color/darker_gray"
+            android:insetLeft="10dp"
+            android:insetRight="10dp" />
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/drawerList"
         android:layout_width="match_parent"
-        android:layout_marginTop="230dp"
+        android:layout_marginTop="70dp"
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
