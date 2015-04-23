@@ -1,17 +1,21 @@
 package com.example.deosfriend.design;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
@@ -223,11 +227,30 @@ public class ListView_Database extends ActionBarActivity{
         });
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){
+ /*   //private SenzorApplication application;
+    //private ListView friendListView;
+    private SearchView searchView;
+    private MenuItem searchMenuItem;
+    //private FriendListAdapter friendListAdapter;
+    //private ArrayList<User> friendList;
 
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        SearchManager searchManager = (SearchManager)
+                getSystemService(Context.SEARCH_SERVICE);
+        searchMenuItem = menu.findItem(R.id.search);
+        searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener((SearchView.OnQueryTextListener) this);
+
         return true;
-    }
+    }*/
 /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
