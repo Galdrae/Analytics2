@@ -64,8 +64,8 @@ public class NavigationDrawerFragment extends Fragment {
 
     public static List<Information> getData(){
         List<Information> data = new ArrayList<>();
-        int[] icons = {R.drawable.remove, R.drawable.accept, R.drawable.document};
-        String[] titles = {"Incomplete", "Completed", "All"};
+        int[] icons = {R.drawable.remove, R.drawable.accept, R.drawable.document, R.drawable.export};
+        String[] titles = {"Incomplete", "Completed", "All", "Export"};
 
         for ( int i = 0; i < titles.length && i < icons.length; i ++ ){
             Information current = new Information();

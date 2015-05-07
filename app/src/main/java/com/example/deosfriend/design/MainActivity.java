@@ -14,9 +14,13 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import Controller.Child;
 import Controller.Message;
 import database.DBAdapter;
+import database.IntervalDBAdapter;
+import database.NewGradingDB;
 import database.SessionDBAdapter;
 
 
@@ -54,6 +58,8 @@ public class MainActivity extends ActionBarActivity {
 
     DBAdapter myDB;
     SessionDBAdapter mySessionDB;
+    IntervalDBAdapter myIntervalDB;
+    NewGradingDB myNewGradingDB;
 
     private Toolbar toolbar;
 
@@ -61,6 +67,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myNewGradingDB = new NewGradingDB(getApplicationContext());
 
         spinnerDDVenue = (Spinner) findViewById(R.id.spinnerVenue);
 
@@ -95,6 +103,7 @@ public class MainActivity extends ActionBarActivity {
         view = (Button) findViewById(R.id.btnView);
 
         openDB();
+        openIntervalDB();
         openSessionDB();
 
     }
@@ -108,6 +117,15 @@ public class MainActivity extends ActionBarActivity {
     private void openDB() {
         myDB = new DBAdapter(this);
         myDB.open();
+    }
+
+    private void openIntervalDB() {
+        myIntervalDB = new IntervalDBAdapter(this);
+        myIntervalDB.open();
+    }
+
+    public void closeIntervalDB() {
+        myIntervalDB.close();
     }
 
     private void openSessionDB() {
@@ -179,41 +197,111 @@ public class MainActivity extends ActionBarActivity {
                     noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 1);
 /*            Message.message(this, "Female Child added");
             displayRecordSet(cursor);*/
+            //***** Export
+            String Session = "1";
+            Child newChild = new Child(name, gender, secDi, priDi ,remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", Session);
+            int status = myNewGradingDB.addPersonDataChild(newChild);
+            if (status == 1){
+                Toast.makeText(getApplicationContext(), "Data inserted successfully", Toast.LENGTH_LONG).show();
+            }
         }
         if (errorMsg == "" && male.isChecked() && cbSession1.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
                     noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 1);
+            //***** Export
+            String SessionNumber = "1";
+            Child newChild = new Child(name, gender, secDi, priDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", SessionNumber);
+            int status = myNewGradingDB.addPersonDataChild(newChild);
+            if (status == 1){
+                Toast.makeText(getApplicationContext(), "Data inserted successfully", Toast.LENGTH_LONG).show();
+            }
         }
         if (errorMsg == "" && female.isChecked() && cbSession2.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
                     noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 2);
+            //***** Export
+            String SessionNumber = "2";
+            Child newChild = new Child(name, gender, secDi, priDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", SessionNumber);
+            int status = myNewGradingDB.addPersonDataChild(newChild);
+            if (status == 1){
+                Toast.makeText(getApplicationContext(), "Data inserted successfully", Toast.LENGTH_LONG).show();
+            }
         }
         if (errorMsg == "" && male.isChecked() && cbSession2.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
                     noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 2);
+            //***** Export
+            String SessionNumber = "2";
+            Child newChild = new Child(name, gender, secDi, priDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", SessionNumber);
+            int status = myNewGradingDB.addPersonDataChild(newChild);
+            if (status == 1){
+                Toast.makeText(getApplicationContext(), "Data inserted successfully", Toast.LENGTH_LONG).show();
+            }
         }
         if (errorMsg == "" && female.isChecked() && cbSession3.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
                     noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 3);
+            //***** Export
+            String SessionNumber = "3";
+            Child newChild = new Child(name, gender, secDi, priDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", SessionNumber);
+            int status = myNewGradingDB.addPersonDataChild(newChild);
+            if (status == 1){
+                Toast.makeText(getApplicationContext(), "Data inserted successfully", Toast.LENGTH_LONG).show();
+            }
         }
         if (errorMsg == "" && male.isChecked() && cbSession3.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
                     noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 3);
+            //***** Export
+            String SessionNumber = "3";
+            Child newChild = new Child(name, gender, secDi, priDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", SessionNumber);
+            int status = myNewGradingDB.addPersonDataChild(newChild);
+            if (status == 1){
+                Toast.makeText(getApplicationContext(), "Data inserted successfully", Toast.LENGTH_LONG).show();
+            }
         }
         if (errorMsg == "" && female.isChecked() && cbSession4.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
                     noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", 4);
+            //***** Export
+            String SessionNumber = "4";
+            Child newChild = new Child(name, gender, secDi, priDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.female_user, "Not observed", SessionNumber);
+            int status = myNewGradingDB.addPersonDataChild(newChild);
+            if (status == 1){
+                Toast.makeText(getApplicationContext(), "Data inserted successfully", Toast.LENGTH_LONG).show();
+            }
         }
         if (errorMsg == "" && male.isChecked() && cbSession4.isChecked()) {
             long newID = myDB.insertRow(name, gender, priDi, secDi, remarks, inspector,
                     spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
                     noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", 4);
+            //***** Export
+            String SessionNumber = "4";
+            Child newChild = new Child(name, gender, secDi, priDi, remarks, inspector,
+                    spinnerDDVenue.getSelectedItem().toString(), spinnerDDActivity.getSelectedItem().toString(),
+                    noOfAdults, noOfChildren, R.drawable.male_user, "Not observed", SessionNumber);
+            int status = myNewGradingDB.addPersonDataChild(newChild);
+            if (status == 1){
+                Toast.makeText(getApplicationContext(), "Data inserted successfully", Toast.LENGTH_LONG).show();
+            }
         }
         if ( errorMsg == "" ) {
             Intent intent = new Intent(MainActivity.this, ListView_Database.class);
@@ -234,7 +322,13 @@ public class MainActivity extends ActionBarActivity {
     public void onClick_Delete(View v) {
         //    Message.message(this, "Delete clicked");
         myDB.deleteAll();
-
+        myNewGradingDB.deleteAllPerson();
+        myNewGradingDB.deleteAllPersonChild();
+        myNewGradingDB.deleteAllPersonInterval();
+        myNewGradingDB.deleteAllPersonSession();
+        myIntervalDB.deleteAll();
+        mySessionDB.deleteAll();
+        Toast.makeText(this, "Data delete successfully", Toast.LENGTH_LONG).show();
     }
 
     // Go to View List

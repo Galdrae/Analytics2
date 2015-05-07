@@ -31,6 +31,7 @@ public class IntervalDBAdapter {
     // TODO: Setup your fields here:
     public static final String KEY_INTERVAL = "Interval";
     public static final String KEY_ENGAGEMENT = "Engagement";
+    public static final String KEY_PHYSICAL = "PhysicalPrompt";
     public static final String KEY_ADULTS = "Adults";
     public static final String KEY_PEERS = "Peers";
     public static final String KEY_MATERIALS = "Materials";
@@ -49,14 +50,14 @@ public class IntervalDBAdapter {
 
 
 
-    public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_INTERVAL, KEY_ENGAGEMENT, KEY_ADULTS, KEY_PEERS, KEY_MATERIALS, KEY_NONEOTHER,
+    public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_INTERVAL, KEY_ENGAGEMENT, KEY_PHYSICAL, KEY_ADULTS, KEY_PEERS, KEY_MATERIALS, KEY_NONEOTHER,
             KEY_CHILDID, KEY_CHILDNAME, KEY_SESSIONNO, KEY_FLAG};
 
     // DB info: it's name, and the table we are using (just one).
     public static final String DATABASE_NAME = "MyIntervalDb";
     public static final String DATABASE_TABLE = "IntervalTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
 
     private static final String DATABASE_CREATE_SQL =
             "create table " + DATABASE_TABLE
@@ -74,6 +75,7 @@ public class IntervalDBAdapter {
                     // NOTE: All must be comma separated (end of line!) Last one must have NO comma!!
                     + KEY_INTERVAL + " text not null, "
                     + KEY_ENGAGEMENT + " text not null, "
+                    + KEY_PHYSICAL + " text not null, "
                     + KEY_ADULTS + " text not null, "
                     + KEY_PEERS + " text not null, "
                     + KEY_MATERIALS + " text not null, "
@@ -113,7 +115,7 @@ public class IntervalDBAdapter {
     }
 
     // Add a new set of values to the database.
-    public long insertRow(String interval, String engagement, String adults, String peers, String materials,
+    public long insertRow(String interval, String engagement, String physicalPrompt, String adults, String peers, String materials,
                           String noneOther, long childId, String childName, long sessionNo, String flag) {
 		/*
 		 * CHANGE 3:
@@ -124,6 +126,7 @@ public class IntervalDBAdapter {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_INTERVAL, interval);
         initialValues.put(KEY_ENGAGEMENT, engagement);
+        initialValues.put(KEY_PHYSICAL, physicalPrompt);
         initialValues.put(KEY_ADULTS, adults);
         initialValues.put(KEY_PEERS, peers);
         initialValues.put(KEY_MATERIALS, materials);

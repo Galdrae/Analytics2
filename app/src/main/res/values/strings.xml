@@ -15,4 +15,5 @@
         <item>TAB 2</item>
         <item>TAB 3</item>
     </string-array>
+    <string name="title_activity_tabs">Tabs</string>
 </resources>

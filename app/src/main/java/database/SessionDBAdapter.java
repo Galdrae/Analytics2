@@ -6,6 +6,7 @@ package database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -180,6 +181,17 @@ public class SessionDBAdapter {
         return c;
     }
 
+    // Get a specific row (by rowId)
+    public Cursor getChildSession(String childID) {
+        String where = KEY_CHILDID + "=" + "'"+childID+"'";
+        Cursor c = 	db.query(true, DATABASE_TABLE, ALL_KEYS,
+                where, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
     // get last row
     public Cursor getLastRow() {
         Cursor c = 	db.query(DATABASE_TABLE, ALL_KEYS,null, null, null, null, null);
@@ -204,13 +216,31 @@ public class SessionDBAdapter {
         newValues.put(KEY_NOINTERVALS, noOfIntervals);
         newValues.put(KEY_NOFLAGS, noOfFlags);
         newValues.put(KEY_SESSIONSTATUS, sessionStatus);
-       // newValues.put(KEY_DATETIMETAKEN, sessionDateTime);
 
         // Insert it into the database.
         return db.update(DATABASE_TABLE, newValues, where, null) != 0;
     }
 
 
+
+    public boolean checkExist(String childID) throws SQLException {
+        int count = -1;
+        Cursor c = null;
+        try {
+            String query = "SELECT COUNT(*) FROM "
+                    + DATABASE_TABLE + " WHERE " + KEY_CHILDID + " = ?";
+            c = db.rawQuery(query, new String[] {childID});
+            if (c.moveToFirst()) {
+                count = c.getInt(0);
+            }
+            return count > 0;
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
 
     /////////////////////////////////////////////////////////////////////
     //	Private Helper Classes:

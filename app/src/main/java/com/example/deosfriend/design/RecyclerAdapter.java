@@ -76,6 +76,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 Intent myIntent = new Intent(v.getContext(), ListView_Database.class);
                 v.getContext().startActivity(myIntent);
             }
+            if ( getPosition() == 3 ){
+                String sortBy = "Export";
+                Intent myIntent = new Intent(v.getContext(), ListView_Database.class);
+                myIntent.putExtra("SortBy", sortBy);
+                v.getContext().startActivity(myIntent);
+            }
         }
 
 /*        @Override

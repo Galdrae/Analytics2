@@ -14,6 +14,7 @@ import android.util.Log;
 public class gradingDB{
     private static final String TAG = "gradingDB";
     public static final String KEY_ROWID = "_id";
+    public static final String KEY_CHILDID = "childId";
     public static final String KEY_NAME = "name";
     public static final String KEY_Qns1 = "qns1";
     public static final String KEY_Qns2 = "qns2";
@@ -28,13 +29,13 @@ public class gradingDB{
     public static final int COL_Qns4 = 5;
     public static final int COL_Qns5 = 6;
 
-    public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_Qns1, KEY_Qns2, KEY_Qns3, KEY_Qns4, KEY_Qns5};
+    public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_CHILDID, KEY_NAME, KEY_Qns1, KEY_Qns2, KEY_Qns3, KEY_Qns4, KEY_Qns5};
 
     // DB info: it's name, and the table we are using (just one).
     public static final String DATABASE_NAME = "gradingDb";
     public static final String DATABASE_TABLE = "GradingTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 11;
+    public static final int DATABASE_VERSION = 12;
 
     private static final String DATABASE_CREATE_SQL =
             "create table " + DATABASE_TABLE
@@ -51,6 +52,7 @@ public class gradingDB{
                     //  - "not null" means it is a required field (must be given a value).
                     // NOTE: All must be comma separated (end of line!) Last one must have NO comma!!
                     + KEY_NAME + " text not null unique, "
+                    + KEY_CHILDID + " text not null unique, "
                     + KEY_Qns1 + " text not null, "
                     + KEY_Qns2 + " text not null, "
                     + KEY_Qns3 + " text not null, "
@@ -84,8 +86,8 @@ public class gradingDB{
     //_______________________________________________________________//_______________________________________________________________//_______________________________________________________________
 
     // Get a specific row (by name)
-    public Cursor getRow1(String name) {
-        String where = KEY_NAME + "= '" + name + "'";
+    public Cursor getRow1(String id) {
+        String where = KEY_CHILDID + "=" + id;
         Cursor c = 	db.query(true, DATABASE_TABLE, ALL_KEYS,
                 where, null, null, null, null, null);
         if (c != null) {
@@ -94,13 +96,13 @@ public class gradingDB{
         return c;
     }
 
-    public boolean checkExist(String _username) throws SQLException {
+    public boolean checkExist(String id) throws SQLException {
         int count = -1;
         Cursor c = null;
         try {
             String query = "SELECT COUNT(*) FROM "
-                    + DATABASE_TABLE + " WHERE " + KEY_NAME + " = ?";
-            c = db.rawQuery(query, new String[] {_username});
+                    + DATABASE_TABLE + " WHERE " + KEY_CHILDID + " = ?";
+            c = db.rawQuery(query, new String[] {id});
             if (c.moveToFirst()) {
                 count = c.getInt(0);
             }
@@ -123,7 +125,7 @@ public class gradingDB{
     }
 
     // Add a new set of values to the database.
-    public long insertRow(String childName , String qns1,  String qns2, String qns3,  String qns4, String qns5) {
+    public long insertRow(String id, String childName , String qns1,  String qns2, String qns3,  String qns4, String qns5) {
 		/*
 		 * CHANGE 3:
 		 */
@@ -131,6 +133,7 @@ public class gradingDB{
         // TODO: Also change the function's arguments to be what you need!
         // Create row's data:
         ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_ROWID, id);
         initialValues.put(KEY_NAME, childName);
         initialValues.put(KEY_Qns1, qns1);
         initialValues.put(KEY_Qns2, qns2);
