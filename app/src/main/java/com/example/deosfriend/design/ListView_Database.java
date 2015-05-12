@@ -28,8 +28,13 @@ import android.widget.Toast;
 
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import Controller.Child;
@@ -39,7 +44,9 @@ import Controller.Message;
 import Controller.Session;
 import au.com.bytecode.opencsv.CSVWriter;
 import database.DBAdapter;
+import database.IntervalDBAdapter;
 import database.NewGradingDB;
+import database.SessionDBAdapter;
 
 /**
  * Created by Deo's Friend on 3/14/2015.
@@ -52,6 +59,8 @@ public class ListView_Database extends ActionBarActivity{
     File file=null;
     Button View;
     ImageButton FAB;
+    IntervalDBAdapter myIntervalDb;
+    SessionDBAdapter mySessionDb;
 
     private Toolbar toolbar;
     @Override
@@ -83,6 +92,8 @@ public class ListView_Database extends ActionBarActivity{
 
         // methods
         openDB();
+        openIntervalDB();
+        openSessionDB();
 
         if (getIntent().getExtras() == null )
         {
@@ -117,6 +128,24 @@ public class ListView_Database extends ActionBarActivity{
 
     public void closeDB() {
         myDB.close();
+    }
+
+    private void openIntervalDB(){
+        myIntervalDb = new IntervalDBAdapter(this);
+        myIntervalDb.open();
+    }
+
+    public void closeIntervalDB() {
+        myIntervalDb.close();
+    }
+
+    private void openSessionDB(){
+        mySessionDb = new SessionDBAdapter(this);
+        mySessionDb .open();
+    }
+
+    public void closeSessionDB() {
+        mySessionDb .close();
     }
 
     public void onClick_View(android.view.View v){
@@ -239,10 +268,13 @@ public class ListView_Database extends ActionBarActivity{
 
                 Cursor cursor = myDB.getRow(idInDB);
                 String id = String.valueOf(idInDB).toString();
+                String childName4 = cursor.getString(1);
+
 
                 // Toast.makeText(ListView_Database.this, "Number is: " + id, Toast.LENGTH_LONG).show();
                 Intent myIntent = new Intent(ListView_Database.this, Tabs.class);
                 myIntent.putExtra("childID", id);
+                myIntent.putExtra("childNAME", childName4);
                 ListView_Database.this.startActivity(myIntent);
 
             }
@@ -253,6 +285,60 @@ public class ListView_Database extends ActionBarActivity{
         populateListViewFromDB();
         ExportDatabaseCSVTask task=new ExportDatabaseCSVTask();
         task.execute();
+        exportDB();
+
+
+        myDB.deleteAll();
+        myNewGradingDB.deleteAllPerson();
+        myNewGradingDB.deleteAllPersonChild();
+        myNewGradingDB.deleteAllPersonInterval();
+        myNewGradingDB.deleteAllPersonSession();
+        myIntervalDb.deleteAll();
+        mySessionDb.deleteAll();
+
+        Intent myIntent = new Intent(ListView_Database.this, ListView_Database.class);
+        ListView_Database.this.startActivity(myIntent);
+    }
+
+    private void exportDB() {
+
+        // date and time code
+        long dateInMillis = System.currentTimeMillis();
+        String formatDate = "dd-MM-yyyy";
+        String formatTime = "HH:mm:ss";
+        // convert date to format
+        final SimpleDateFormat dateString = new SimpleDateFormat(formatDate);
+        // convert time
+        final SimpleDateFormat timeString = new SimpleDateFormat(formatTime);
+        final String date = dateString.format(new Date(dateInMillis));
+        final String time = timeString.format(new Date(dateInMillis));
+
+
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+            if (sd.canWrite()) {
+                String currentDBPath = "//data//" + "com.example.deosfriend.apptest"
+                        + "//databases//" + "newgrading.db";
+                String backupDBPath = "backup " + date +" .db";
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(getApplicationContext(), "Backup Successful!",
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        } catch (Exception e) {
+
+            Toast.makeText(getApplicationContext(), "Backup Failed!", Toast.LENGTH_SHORT)
+                    .show();
+
+        }
     }
 
     private class ExportDatabaseCSVTask extends AsyncTask<String, Void, Boolean> {
@@ -280,8 +366,9 @@ public class ListView_Database extends ActionBarActivity{
 
                 file.createNewFile();
                 CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+                SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
 
-                //ormlite core method
+//                //ormlite core method
                 Child person=null;
                 List<Child> listdataChild = myNewGradingDB.GetDataPersonChild();
                 //this is the Column of the table and same for Header of CSV file
@@ -336,22 +423,64 @@ public class ListView_Database extends ActionBarActivity{
 
                 csvWrite.writeNext();
 
-                List<Grade_Child> listdata=myNewGradingDB.GetDataPerson();
-                Grade_Child Question=null;
+//                List<Grade_Child> listdata=myNewGradingDB.GetDataPerson();
+//                Grade_Child Question=null;
+//
+//                // this is the Column of the table and same for Header of CSV file
+//                String arrStr1[] ={"Name","Child_id" , "Qns1", "Qns2","Qns3", "Qns4", "Qns5"};
+//                csvWrite.writeNext(arrStr1);
+//
+//                if(listdata.size() > 1)
+//                {
+//                    for(int index=0; index < listdata.size(); index++)
+//                    {
+//                        Question=listdata.get(index);
+//                        String arrStr[] ={Question.getChildId(), Question.getName(), Question.getQns1(), Question.getQns2(), Question.getQns3(), Question.getQns4(), Question.getQns5()};
+//                        csvWrite.writeNext(arrStr);
+//                    }
+//                }
 
-                // this is the Column of the table and same for Header of CSV file
-                String arrStr1[] ={"Name","Child_id" , "Qns1", "Qns2","Qns3", "Qns4", "Qns5"};
-                csvWrite.writeNext(arrStr1);
-
-                if(listdata.size() > 1)
-                {
-                    for(int index=0; index < listdata.size(); index++)
-                    {
-                        Question=listdata.get(index);
-                        String arrStr[] ={Question.getChildId(), Question.getName(), Question.getQns1(), Question.getQns2(), Question.getQns3(), Question.getQns4(), Question.getQns5()};
-                        csvWrite.writeNext(arrStr);
-                    }
+//                Cursor curCSV3 = db.rawQuery("SELECT * FROM child", null);
+//                csvWrite.writeNext("Name", "Gender", "SessionNo", "Inspector", "Remarks", "Primary Diagnosis", "Secondary Diagnosis", "Activity", "No of adults", "No of children", "Status", "Venue");
+//                while (curCSV3.moveToNext()) {
+//                    String arrStr[] = {curCSV3.getString(3), curCSV3.getString(4),
+//                            curCSV3.getString(9), curCSV3.getString(5), curCSV3.getString(8), curCSV3.getString(0), curCSV3.getString(1), curCSV3.getString(2),
+//                            curCSV3.getString(6), curCSV3.getString(7), curCSV3.getString(10), curCSV3.getString(11)};
+//                    csvWrite.writeNext(arrStr);
+//                }
+//
+//                csvWrite.writeNext();
+//
+//                Cursor curCSV4 = db.rawQuery("SELECT * FROM interval", null);
+//                csvWrite.writeNext("Name", "Child_id", "SessionNo", "Flag", "engagement", "Adult", "Interval", "Material", "Peers", "None Other", "Physical");
+//                while (curCSV4.moveToNext()) {
+//                    String arrStr[] = {curCSV4.getString(1), curCSV4.getString(2),
+//                            curCSV4.getString(10), curCSV4.getString(4), curCSV4.getString(3), curCSV4.getString(0), curCSV4.getString(5), curCSV4.getString(6),
+//                            curCSV4.getString(8), curCSV4.getString(7), curCSV4.getString(9)};
+//                    csvWrite.writeNext(arrStr);
+//                }
+//
+//                csvWrite.writeNext();
+//
+//                Cursor curCSV5 = db.rawQuery("SELECT * FROM session ", null);
+//                csvWrite.writeNext("Name", "Child_id", "Center", "Observer", "Session Count", "Session Status", "Date", "Start Time", "End Time", "No of flag", "No of interval ");
+//                while (curCSV5.moveToNext()) {
+//                    String arrStr[] = {curCSV5.getString(7), curCSV5.getString(1), curCSV5.getString(0), curCSV5.getString(6),
+//                            curCSV5.getString(8), curCSV5.getString(9), curCSV5.getString(2), curCSV5.getString(10),
+//                            curCSV5.getString(3), curCSV5.getString(4), curCSV5.getString(5)};
+//                    csvWrite.writeNext(arrStr);
+//                }
+//
+//                csvWrite.writeNext();
+//
+                Cursor curCSV = db.rawQuery("SELECT * FROM grade_child", null);
+                csvWrite.writeNext("Name", "Child_id", "Qns1", "Qns2", "Qns3", "Qns4", "Qns5");
+                while (curCSV.moveToNext()) {
+                    String arrStr[] = {curCSV.getString(1), curCSV.getString(0),
+                            curCSV.getString(3), curCSV.getString(4), curCSV.getString(5), curCSV.getString(6), curCSV.getString(7)};
+                    csvWrite.writeNext(arrStr);
                 }
+
 
                 csvWrite.writeNext();
 
@@ -419,3 +548,4 @@ public class ListView_Database extends ActionBarActivity{
         return super.onOptionsItemSelected(item);
     }*/
 }
+

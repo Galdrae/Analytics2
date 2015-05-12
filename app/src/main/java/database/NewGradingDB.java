@@ -21,7 +21,7 @@ import com.j256.ormlite.table.TableUtils;
 public class NewGradingDB  extends OrmLiteSqliteOpenHelper{
     private static final String TAG="GradeDatabaseHelper";
     private static final String DATABASE_NAME = "newgrading.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 8;
     private RuntimeExceptionDao<Grade_Child, String> personRuntimeDao=null;
     private RuntimeExceptionDao<Child, String> personRuntimeDaoChild=null;
     private RuntimeExceptionDao<Interval, String> personRuntimeDaoInterval=null;

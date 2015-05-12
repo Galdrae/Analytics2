@@ -192,8 +192,8 @@ public class Timer_Test extends ActionBarActivity {
                                 String childrenIDStr = Long.toString(childID);
                                     Toast.makeText(Timer_Test.this, childId, Toast.LENGTH_SHORT).show();
                                     String statusUpdate = "Fail";
-                                    //String updateChildArray[]= new String[]{statusUpdate};
-                                    updateChildRecord(childrenIDStr, statusUpdate);
+                                    String updateChildArray[]= new String[]{statusUpdate};
+                                    updateChildRecord(childrenIDStr, updateChildArray);
                                     Toast.makeText(Timer_Test.this, "Can", Toast.LENGTH_SHORT).show();
                                 //
 
@@ -240,6 +240,8 @@ public class Timer_Test extends ActionBarActivity {
 
                 Cursor lastRowID = mySessionDB.getLastRow();
 
+                alarm.vibrate(500);
+
                 int count = intervalCount = intervalCount + 1;
                 // if reach maximum interval, stop timer
                 if (count >= 6) {
@@ -256,8 +258,8 @@ public class Timer_Test extends ActionBarActivity {
                     // ===================== update into child (export)*** ========================
                     String childrenIDStr = Long.toString(childID);
                     String statusUpdate = "Completed";
-                    //String updateChildArray[]= new String[]{statusUpdate};
-                    updateChildRecord(childrenIDStr, statusUpdate);
+                    String updateChildArray[]= new String[]{statusUpdate};
+                    updateChildRecord(childrenIDStr, updateChildArray);
                     //
 
                     // session update
@@ -465,6 +467,8 @@ public class Timer_Test extends ActionBarActivity {
 
                         } else if (timeButton.getText().equals("Start")) {
 
+                            alarm.vibrate(500);
+
                             // date and time code
                             long dateInMillis = System.currentTimeMillis();
                             String formatDate = "dd-MM-yyyy";
@@ -486,8 +490,8 @@ public class Timer_Test extends ActionBarActivity {
                             // ===================== update into child (export)*** ========================
                             String childrenIDStr = Long.toString(childID);
                             String statusUpdate = "Incomplete";
-                            //String updateChildArray[]= new String[]{statusUpdate};
-                            updateChildRecord(childrenIDStr, statusUpdate);
+                            String updateChildArray[]= new String[]{statusUpdate};
+                            updateChildRecord(childrenIDStr, updateChildArray);
                             //
 
                             // create session row
@@ -667,19 +671,19 @@ public class Timer_Test extends ActionBarActivity {
 
 //*************************************************************************************************************************************************************************
     // update record
-    public void updateChildRecord(String ChildrenID, String status){
-        SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
-        ContentValues newValues = new ContentValues();
-        newValues.put("status", status);
-        db.update("child", newValues ," id = '" + ChildrenID + "'", null);
-    }
-
-//    public void updateChildRecord(String ChildrenID, String updateChildArray[]){
+//    public void updateChildRecord(String ChildrenID, String status){
 //        SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
 //        ContentValues newValues = new ContentValues();
-//        newValues.put("status", updateChildArray[0]);
+//        newValues.put("status", "test");
 //        db.update("child", newValues ," id = '" + ChildrenID + "'", null);
 //    }
+
+    public void updateChildRecord(String ChildrenID, String updateChildArray[]){
+        SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
+        ContentValues newValues = new ContentValues();
+        newValues.put("status", updateChildArray[0]);
+        db.update("child", newValues ," id = '" + ChildrenID + "'", null);
+    }
 
     public void updateSessionRecord(String ChildrenID, String updateSessionArray[]){
         SQLiteDatabase db = myNewGradingDB.getReadableDatabase();

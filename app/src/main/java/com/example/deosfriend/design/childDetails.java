@@ -39,15 +39,19 @@ import database.gradingDB;
  * Created by Deo's Friend on 3/15/2015.
  */
 public class childDetails extends ActionBarActivity {
-    DBAdapter myDB;
     SessionDBAdapter mySessionDB;
-
     EditText childName, childGender, childPriDi, childSecDi, childRemarks, childInspector, childVenue, childActivity, childNoAdults, childNoChildren;
     TextView lbSessionId, lbChildId, lbSessionNo, lbTotalInterval, lbTotalFlags, lbDateTaken, lbTimeStarted, lbTimeEnded, lbSessionStatus, name;
-    Button start;
+    Button start, Export;
     String childName4, childID;
     Button btnSubmit;
     Toolbar toolbar;
+    private static final String TAG = "Grade";
+    File file = null;
+    String array[] = new String[]{"child_Id", "name", "qns1", "qns2", "qns3", "qns4", "qns5", "id"};
+    DBAdapter myDB;
+    gradingDB gradeDB;
+    NewGradingDB myNewGradingDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,7 @@ public class childDetails extends ActionBarActivity {
         setContentView(R.layout.child_details);
 
         childName = (EditText) findViewById(R.id.tbName);
+        Export = (Button) findViewById(R.id.btn_Export);
         childGender = (EditText) findViewById(R.id.tbGender);
         childPriDi = (EditText) findViewById(R.id.tbPriDi);
         childSecDi = (EditText) findViewById(R.id.tbSecDi);
@@ -76,6 +81,7 @@ public class childDetails extends ActionBarActivity {
         lbSessionStatus = (TextView) findViewById(R.id.lbStatus);
 
         start = (Button) findViewById(R.id.btnObserve);
+        myNewGradingDB = new NewGradingDB(getApplicationContext());
 
         openDB();
         openSessionDB();
@@ -109,7 +115,7 @@ public class childDetails extends ActionBarActivity {
                 }
         );
         btnSubmit = (Button) findViewById(R.id.button2);
-        name = (TextView) findViewById(R.id.tbChildName);
+
     }
     // ============ Database =================
     protected void onDestroy() {
@@ -136,4 +142,122 @@ public class childDetails extends ActionBarActivity {
         Intent myIntent = new Intent(childDetails.this, ListView_Database.class);
         childDetails.this.startActivity(myIntent);
     }
+
+    public void OnClick_Export(View v) {
+        ExportDatabaseCSVTask task = new ExportDatabaseCSVTask();
+        task.execute();
+    }
+
+    private class ExportDatabaseCSVTask extends AsyncTask<String, Void, Boolean> {
+        private final ProgressDialog dialog = new ProgressDialog(childDetails.this);
+
+        @Override
+        protected void onPreExecute() {
+
+            this.dialog.setMessage("Exporting database...");
+            this.dialog.show();
+
+        }
+
+        protected Boolean doInBackground(final String... args) {
+
+            File dbFile = getDatabasePath("newgrading.db");
+            Log.v(TAG, "Db path is: " + dbFile);  //get the path of db
+
+            File exportDir = new File(Environment.getExternalStorageDirectory(), "");
+            if (!exportDir.exists()) {
+                exportDir.mkdirs();
+            }
+
+            file = new File(exportDir, "" + childName4 + "Details.csv");
+            try {
+
+                file.createNewFile();
+                CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+
+
+                // sqlite core query
+                SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
+                //Cursor curCSV=mydb.rawQuery("select * from " + TableName_ans,null);
+
+                Cursor curCSV3 = db.rawQuery("SELECT * FROM child WHERE childName = ?", new String[]{childName4});
+                csvWrite.writeNext("Name", "Gender", "SessionNo", "Inspector", "Remarks", "Primary Diagnosis", "Secondary Diagnosis", "Activity", "No of adults", "No of children", "Session Status", "Venue");
+                while (curCSV3.moveToNext()) {
+                    String arrStr[] = {
+                            curCSV3.getString(3), curCSV3.getString(4),
+                            curCSV3.getString(11),curCSV3.getString(7),
+                            curCSV3.getString(10),curCSV3.getString(0),
+                            curCSV3.getString(1), curCSV3.getString(2),
+                            curCSV3.getString(8), curCSV3.getString(9),
+                            curCSV3.getString(6), curCSV3.getString(5)};
+                    csvWrite.writeNext(arrStr);
+                }
+
+                csvWrite.writeNext();
+
+                Cursor curCSV4 = db.rawQuery("SELECT * FROM interval WHERE childName = ?", new String[]{childName4});
+                csvWrite.writeNext("Name", "Child_id", "SessionNo", "Flag", "engagement", "Interval", "Adult", "Peer", "Material", "None Other", "Physical");
+                while (curCSV4.moveToNext()) {
+                    String arrStr[] = {
+                            curCSV4.getString(1), curCSV4.getString(2),
+                            curCSV4.getString(5), curCSV4.getString(4),
+                            curCSV4.getString(3), curCSV4.getString(6),
+                            curCSV4.getString(0), curCSV4.getString(9),
+                            curCSV4.getString(7), curCSV4.getString(8),
+                            curCSV4.getString(10)};
+                    csvWrite.writeNext(arrStr);
+                }
+
+                csvWrite.writeNext();
+
+                Cursor curCSV5 = db.rawQuery("SELECT * FROM session WHERE sessionChildName = ?", new String[]{childName4});
+                csvWrite.writeNext("Name", "Child_id", "Venue", "Inspector", "Session No", "Session Status", "Date", "Start Time", "End Time", "No of flag", "No of interval ");
+                while (curCSV5.moveToNext()) {
+                    String arrStr[] = {
+                            curCSV5.getString(8), curCSV5.getString(1),
+                            curCSV5.getString(0), curCSV5.getString(7),
+                            curCSV5.getString(9), curCSV5.getString(10),
+                            curCSV5.getString(2), curCSV5.getString(4),
+                            curCSV5.getString(3), curCSV5.getString(5),
+                            curCSV5.getString(6)};
+                    csvWrite.writeNext(arrStr);
+                }
+
+                csvWrite.writeNext();
+
+                Cursor curCSV = db.rawQuery("SELECT * FROM grade_child WHERE name = ?", new String[]{childName4});
+                csvWrite.writeNext("Name", "Child_id", "Qns1", "Qns2", "Qns3", "Qns4", "Qns5");
+                while (curCSV.moveToNext()) {
+                    String arrStr[] = {
+                            curCSV.getString(1), curCSV.getString(0),
+                            curCSV.getString(3),
+                            curCSV.getString(4), curCSV.getString(5),
+                            curCSV.getString(6),curCSV.getString(7)};
+                    csvWrite.writeNext(arrStr);
+                }
+
+                csvWrite.writeNext();
+
+                csvWrite.close();
+                return true;
+            } catch (IOException e) {
+                Log.e("Grade", e.getMessage(), e);
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+            if (this.dialog.isShowing()) {
+                this.dialog.dismiss();
+            }
+            if (success) {
+                Toast.makeText(childDetails.this, "Export successful!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(childDetails.this, "Export failed!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }
