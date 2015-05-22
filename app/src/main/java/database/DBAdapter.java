@@ -59,7 +59,7 @@ public class DBAdapter {
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "ChildTable";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 12;
+	public static final int DATABASE_VERSION = 19;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 
@@ -275,4 +275,85 @@ public class DBAdapter {
 			onCreate(_db);
 		}
 	}
+
+    public void truncateYKChildTables(){
+        db.execSQL("delete from sqlite_sequence where name='" + DATABASE_TABLE + "'");
+        db.execSQL("delete from "+ DATABASE_TABLE );
+    }
+
+    public int CountComplete(String status){
+        int count = 0;
+        Cursor c = null;
+        try {
+            String query = "SELECT COUNT(*) FROM "
+                    + DATABASE_TABLE + " WHERE " + KEY_STATUS + " = ?";
+            c = db.rawQuery(query, new String[] {status});
+            if (c.moveToFirst()) {
+                count = c.getInt(0);
+            }
+            return count;
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+    public int CountIncomplete(String status){
+        int count = 0;
+        Cursor c = null;
+        try {
+            String query = "SELECT COUNT(*) FROM "
+                    + DATABASE_TABLE + " WHERE " + KEY_STATUS + " = ?";
+            c = db.rawQuery(query, new String[] {status});
+            if (c.moveToFirst()) {
+                count = c.getInt(0);
+            }
+            return count;
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+    public int CountFail(String status){
+        int count = 0;
+        Cursor c = null;
+        try {
+            String query = "SELECT COUNT(*) FROM "
+                    + DATABASE_TABLE + " WHERE " + KEY_STATUS + " = ?";
+            c = db.rawQuery(query, new String[] {status});
+            if (c.moveToFirst()) {
+                count = c.getInt(0);
+            }
+            return count;
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+    public int CountNotObserve(String status){
+        int count = 0;
+        Cursor c = null;
+        try {
+            String query = "SELECT COUNT(*) FROM "
+                    + DATABASE_TABLE + " WHERE " + KEY_STATUS + " = ?";
+            c = db.rawQuery(query, new String[] {status});
+            if (c.moveToFirst()) {
+                count = c.getInt(0);
+            }
+            return count;
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
 }

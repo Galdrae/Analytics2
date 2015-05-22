@@ -58,7 +58,7 @@ public class SessionDBAdapter {
     public static final String DATABASE_NAME = "MySessionDb";
     public static final String DATABASE_TABLE = "ChildSessionTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
 
     private static final String DATABASE_CREATE_SQL =
             "create table " + DATABASE_TABLE
@@ -203,7 +203,7 @@ public class SessionDBAdapter {
 
     // Change an existing row to be equal to new data.
     public boolean updateInCompleteSession(long rowId, String endTime, String noOfIntervals, String noOfFlags, String sessionStatus) {
-        String where = KEY_ROWID + "=" + rowId;
+        String where = KEY_CHILDID + "=" + rowId;
 
 		/*
 		 * CHANGE 4:
@@ -272,5 +272,10 @@ public class SessionDBAdapter {
             // Recreate new database:
             onCreate(_db);
         }
+    }
+
+    public void truncateYKSessionTables(){
+        db.execSQL("delete from sqlite_sequence where name='" + DATABASE_TABLE + "'");
+        db.execSQL("delete from "+ DATABASE_TABLE );
     }
 }

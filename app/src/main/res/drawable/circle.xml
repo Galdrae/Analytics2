@@ -87,7 +87,7 @@
 
             <item>
                 <shape android:shape="oval">
-                    <solid android:color="#F06292"/>
+                    <solid android:color="#E53935"/>
                     <padding
                         android:bottom="1px"
                         android:left="1px"

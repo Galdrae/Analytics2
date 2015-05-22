@@ -1,45 +1,44 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     android:layout_weight="1"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+    android:background="#FAFAFA"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#FAFAFA"
+        android:weightSum="1"
         android:orientation="vertical">
 
-        <!--        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/card_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:background="#03A9F4"
-                    card_view:cardBackgroundColor="#03A9F4">
-
-                </android.support.v7.widget.CardView>-->
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#FAFAFA"
             android:orientation="vertical"
             android:paddingLeft="40dp"
             android:paddingRight="40dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Name of Child"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
             <EditText
                 android:id="@+id/tbName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:hint="Name"
+                android:hint="Enter field"
                 android:inputType="textPersonName"
                 android:typeface="sans" />
 
@@ -61,32 +60,64 @@
                 android:onClick="onClick_rbFemale"
                 android:text="Female" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Primary Diagnosis"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
             <EditText
                 android:id="@+id/tbPriDi"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Primary Diagnosis"
+                android:hint="Enter field"
                 android:inputType="text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Secondary Diagnosis"
+                android:textColor="#000000"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/tbSecDi"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Secondary Diagnosis"
+                android:hint="Enter field"
                 android:inputType="text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Remarks"
+                android:textColor="#000000"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/tbRemarks"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Remarks"
+                android:hint="Enter field"
                 android:inputType="text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Inspector/Observer"
+                android:textColor="#000000"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/tbInspector"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Inspector"
+                android:hint="Enter field"
                 android:inputType="text" />
 
             <Spinner
@@ -105,18 +136,34 @@
                 android:popupBackground="#ffffffff"
                 android:spinnerMode="dropdown" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="No. of Adults"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
             <EditText
                 android:id="@+id/tbNoAdults"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="No. of Adults"
+                android:hint="Enter field"
                 android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="No. of Children"
+                android:textColor="#000000"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/tbNoChildren"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="No. of Children"
+                android:hint="Enter field"
                 android:inputType="number" />
 
             <Button
@@ -126,7 +173,8 @@
                 android:layout_above="@+id/btnCreate"
                 android:layout_alignEnd="@+id/rbFemale"
                 android:onClick="onClick_Delete"
-                android:text="Delete" />
+                android:text="Delete"
+                 />
 
             <Button
                 android:id="@+id/btnList"
@@ -151,20 +199,19 @@
                 android:text="View"
                 android:visibility="gone" />
 
-        </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
 
             <CheckBox
                 android:id="@+id/cbSession1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Session 1"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <CheckBox
                 android:id="@+id/cbSession2"
@@ -172,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="Session 2"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <CheckBox
                 android:id="@+id/cbSession3"
@@ -180,7 +227,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="Session 3"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <CheckBox
                 android:id="@+id/cbSession4"
@@ -188,29 +235,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="Session 4"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FAFAFA"
+            android:gravity="center|bottom"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/btnCreate"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center"
+                android:background="@drawable/a_mybutton"
+                android:onClick="onClick_Create"
+                android:text="Submit"
+                android:textColor="#ffffffff" />
+
+        </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:background="#FAFAFA"
-        android:gravity="center|bottom"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btnCreate"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center"
-            android:background="@drawable/a_mybutton"
-            android:onClick="onClick_Create"
-            android:text="Submit"
-            android:textColor="#ffffffff" />
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

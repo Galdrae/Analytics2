@@ -24,6 +24,9 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import Controller.Child;
 import Controller.Grade_Child;
 import Controller.Interval;
@@ -39,6 +42,7 @@ import database.gradingDB;
  * Created by Deo's Friend on 3/15/2015.
  */
 public class childDetails extends ActionBarActivity {
+
     SessionDBAdapter mySessionDB;
     EditText childName, childGender, childPriDi, childSecDi, childRemarks, childInspector, childVenue, childActivity, childNoAdults, childNoChildren;
     TextView lbSessionId, lbChildId, lbSessionNo, lbTotalInterval, lbTotalFlags, lbDateTaken, lbTimeStarted, lbTimeEnded, lbSessionStatus, name;
@@ -90,6 +94,7 @@ public class childDetails extends ActionBarActivity {
         Long inID = Long.parseLong(childID);
 
         Cursor cursor = myDB.getRow(inID);
+        Cursor sessionCursor = mySessionDB.getChildSession(childID);
 
         childName.setText("Name:     " + cursor.getString(1));
         childGender.setText("Gender:   " + cursor.getString(2));
@@ -104,6 +109,13 @@ public class childDetails extends ActionBarActivity {
 
         childName4 = cursor.getString(1);
 
+        if ( mySessionDB.checkExist(childID))
+        if ( sessionCursor.getString(11).equals("Completed") || sessionCursor.getString(11).equals("Fail") ) {
+            start.setVisibility(View.GONE);
+            Export.setVisibility(View.VISIBLE);
+        }
+
+        start.setText("Proceed");
         start.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
@@ -169,7 +181,18 @@ public class childDetails extends ActionBarActivity {
                 exportDir.mkdirs();
             }
 
-            file = new File(exportDir, "" + childName4 + "Details.csv");
+            // date and time code
+            long dateInMillis = System.currentTimeMillis();
+            String formatDate = "dd-MM-yyyy";
+            String formatTime = "HH-mm-ss";
+            // convert date to format
+            final SimpleDateFormat dateString = new SimpleDateFormat(formatDate);
+            // convert time
+            final SimpleDateFormat timeString = new SimpleDateFormat(formatTime);
+            final String date = dateString.format(new Date(dateInMillis));
+            final String time = timeString.format(new Date(dateInMillis));
+
+            file = new File(exportDir, "" + childName4 + " (D)" + date + " (T)" + time + " Details.csv");
             try {
 
                 file.createNewFile();
@@ -180,7 +203,7 @@ public class childDetails extends ActionBarActivity {
                 SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
                 //Cursor curCSV=mydb.rawQuery("select * from " + TableName_ans,null);
 
-                Cursor curCSV3 = db.rawQuery("SELECT * FROM child WHERE childName = ?", new String[]{childName4});
+                Cursor curCSV3 = db.rawQuery("SELECT * FROM child WHERE id = ?", new String[]{childID});
                 csvWrite.writeNext("Name", "Gender", "SessionNo", "Inspector", "Remarks", "Primary Diagnosis", "Secondary Diagnosis", "Activity", "No of adults", "No of children", "Session Status", "Venue");
                 while (curCSV3.moveToNext()) {
                     String arrStr[] = {
@@ -195,7 +218,7 @@ public class childDetails extends ActionBarActivity {
 
                 csvWrite.writeNext();
 
-                Cursor curCSV4 = db.rawQuery("SELECT * FROM interval WHERE childName = ?", new String[]{childName4});
+                Cursor curCSV4 = db.rawQuery("SELECT * FROM interval WHERE child_id = ?", new String[]{childID});
                 csvWrite.writeNext("Name", "Child_id", "SessionNo", "Flag", "engagement", "Interval", "Adult", "Peer", "Material", "None Other", "Physical");
                 while (curCSV4.moveToNext()) {
                     String arrStr[] = {
@@ -210,7 +233,7 @@ public class childDetails extends ActionBarActivity {
 
                 csvWrite.writeNext();
 
-                Cursor curCSV5 = db.rawQuery("SELECT * FROM session WHERE sessionChildName = ?", new String[]{childName4});
+                Cursor curCSV5 = db.rawQuery("SELECT * FROM session WHERE child_Id = ?", new String[]{childID});
                 csvWrite.writeNext("Name", "Child_id", "Venue", "Inspector", "Session No", "Session Status", "Date", "Start Time", "End Time", "No of flag", "No of interval ");
                 while (curCSV5.moveToNext()) {
                     String arrStr[] = {
@@ -225,7 +248,7 @@ public class childDetails extends ActionBarActivity {
 
                 csvWrite.writeNext();
 
-                Cursor curCSV = db.rawQuery("SELECT * FROM grade_child WHERE name = ?", new String[]{childName4});
+                Cursor curCSV = db.rawQuery("SELECT * FROM grade_child WHERE child_Id = ?", new String[]{childID});
                 csvWrite.writeNext("Name", "Child_id", "Qns1", "Qns2", "Qns3", "Qns4", "Qns5");
                 while (curCSV.moveToNext()) {
                     String arrStr[] = {

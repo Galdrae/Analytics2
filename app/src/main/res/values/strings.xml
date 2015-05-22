@@ -16,4 +16,6 @@
         <item>TAB 3</item>
     </string-array>
     <string name="title_activity_tabs">Tabs</string>
+    <string name="title_activity_export__list">Export_List</string>
+    <string name="title_activity_export__row">Export_Row</string>
 </resources>

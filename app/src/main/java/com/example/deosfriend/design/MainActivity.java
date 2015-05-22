@@ -188,6 +188,11 @@ public class MainActivity extends ActionBarActivity {
             errorMsg = "Select gender";
             Message.message(this, errorMsg);
         }
+        // Checkboxes
+        if ( cbSession1.isChecked() == false && cbSession2.isChecked() == false && cbSession3.isChecked() == false && cbSession4.isChecked() == false){
+            errorMsg = "Select the sessions to be added";
+            Message.message(this, errorMsg);
+        }
         //===================================================================
 
         // if all fields are filled

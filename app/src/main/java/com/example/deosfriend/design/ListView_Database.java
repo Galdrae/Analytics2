@@ -73,7 +73,7 @@ public class ListView_Database extends ActionBarActivity{
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(MainActivity.this,"Hello World", Toast.LENGTH_SHORT).show();
+
                 Intent i = new Intent(ListView_Database.this,MainActivity.class);
                 startActivity(i);
             }
@@ -109,11 +109,15 @@ public class ListView_Database extends ActionBarActivity{
                 sortListViewByCompleted();
             }
             if ( sortBy.equals("Export")){
-                exportAll();
-            }
+                exportAllPG();            }
         }
         registerListCallBack();
 
+    }
+
+    private void exportAllPG() {
+        Intent intent = new Intent(ListView_Database.this, Export_List.class);
+        ListView_Database.this.startActivity(intent);
     }
 
     protected void onDestroy() {

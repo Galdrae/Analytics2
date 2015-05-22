@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/app_bar"
-        layout="@layout/app_bar_2" />
+        layout="@layout/app_bar" />
 
     <android.support.v4.widget.DrawerLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/drawer_layout"
@@ -30,40 +30,19 @@
                 android:dividerHeight="1dp" />
 
             <Button
-                android:id="@+id/btnCreate"
-                android:layout_width="600dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/btn_Export"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_gravity="left|bottom"
-                android:layout_marginRight="40dp"
-                android:onClick="onClick_Create"
-                android:text="Create"
-                android:visibility="gone" />
+
+                android:onClick="onClick_Export"
+                android:text="Export"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center"
+                android:background="@drawable/a_mybutton"
+                android:textColor="#ffffffff" />
 
         </RelativeLayout>
-
-        <!--<FAB - Floating Action Button>-->
-        <FrameLayout
-            android:id="@+id/frameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true">
-
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="750dp"
-                android:layout_marginRight="50dp"
-                android:layout_gravity="right"
-                android:background="@drawable/circle"
-                android:src="@drawable/iconblack" />
-
-
-        </FrameLayout>
 
         <fragment
             android:id="@+id/fragment_navigation_drawer"

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -17,8 +18,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import Controller.Interval;
 import Controller.Session;
 import database.DBAdapter;
@@ -41,6 +44,8 @@ public class Timer_Test extends ActionBarActivity {
     IntervalDBAdapter myIntervalDB;
     NewGradingDB myNewGradingDB;
 
+    Cursor lastRowID;
+
     private Toolbar toolbar;
 
     private int minutes; // will be widely used across 2-3 different
@@ -49,6 +54,9 @@ public class Timer_Test extends ActionBarActivity {
     private long startTime = 0L; // default when timer starts
     private long updateTime = 0L; // stores time after pause begins
     private long pasTime = 0L; // stores time when paused
+
+
+
     private long timeLimit = 29 * 60 * (10 ^ 3);
     private long eightSecsLimit = 15 * 60 * (10 ^ 3);
     private long tenSecsLimit = 20 * 60 * (10 ^ 3);
@@ -115,7 +123,14 @@ public class Timer_Test extends ActionBarActivity {
                 noneOther = "Yes";
             else
                 noneOther = "Null";
-            physicalPrompt = tbPhysicalPrompt.getText().toString();
+
+            if (cbPhysicalPrompt.isChecked()) {
+                physicalPrompt = "Checked";
+                cbPhysicalPrompt.setChecked(true);
+            } else {
+                physicalPrompt = "null";
+                cbPhysicalPrompt.setChecked(false);
+            }
 
             // ===================== Countdown observe ========================
             int count2 = 0;
@@ -157,20 +172,23 @@ public class Timer_Test extends ActionBarActivity {
             flag.setOnClickListener(
                     new View.OnClickListener() {
                         public void onClick(View v) {
+
+                            mySessionDB.updateInCompleteSession(childID, "SessionOnGoing", interval.getText().toString(), "Flag Count: " + flagCount, "Incomplete");
+
                             if (flagCount < 9) { // resets current interval and add a flag count
                                 flagCount = flagCount + 1;
                                 flag.setText("Flag Count: " + flagCount);
                                 startTime = System.currentTimeMillis();
                                 timerHandler.removeCallbacks(timerRunnable);
-                                timeButton.setText("Resume");
+                                timeButton.setText("Reset");
                                 myIntervalDB.insertRow(interval.getText().toString(), engagement, physicalPrompt, adults, peers, materials, noneOther, childID, childName, sessionNo, "Flagged!");
 
                                 // ===================== insert into interval (export)*** ========================
                                 String childrenIDStr = Long.toString(childID);
                                 String sessionNoStr = String.valueOf(sessionNo);
-                                Interval newInterval = new Interval( childrenIDStr, interval.getText().toString(), engagement, physicalPrompt, adults, peers, materials, noneOther,childName, sessionNoStr, "Flagged!");
+                                Interval newInterval = new Interval(childrenIDStr, interval.getText().toString(), engagement, physicalPrompt, adults, peers, materials, noneOther, childName, sessionNoStr, "Flagged!");
                                 int status = myNewGradingDB.addPersonDataInterval(newInterval);
-                                if (status == 1){
+                                if (status == 1) {
 //                                    Toast.makeText(getApplicationContext(), "-flag count less then 9- inserted successfully", Toast.LENGTH_LONG).show();
                                 }
                                 //
@@ -190,21 +208,21 @@ public class Timer_Test extends ActionBarActivity {
 
                                 // ===================== update into child (export)*** ========================
                                 String childrenIDStr = Long.toString(childID);
-                                    Toast.makeText(Timer_Test.this, childId, Toast.LENGTH_SHORT).show();
-                                    String statusUpdate = "Fail";
-                                    String updateChildArray[]= new String[]{statusUpdate};
-                                    updateChildRecord(childrenIDStr, updateChildArray);
-                                    Toast.makeText(Timer_Test.this, "Can", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Timer_Test.this, childId, Toast.LENGTH_SHORT).show();
+                                String statusUpdate = "Fail";
+                                String updateChildArray[] = new String[]{statusUpdate};
+                                updateChildRecord(childrenIDStr, updateChildArray);
+                                Toast.makeText(Timer_Test.this, "Can", Toast.LENGTH_SHORT).show();
                                 //
 
-                                mySessionDB.updateInCompleteSession(lastRowID.getInt(0), time, interval.getText().toString(), "Flag Count: 10", "Fail");
+                                mySessionDB.updateInCompleteSession(childID, time, interval.getText().toString(), "Flag Count: 10", "Fail");
 
                                 // ===================== update session (export)*** =============================
                                 String noOfInterval = interval.getText().toString();
                                 String endTimeStr = time;
                                 String flagCount = "Flag Count: 10";
                                 String statustr = "Fail";
-                                String updateArray[]= new String[]{endTimeStr, noOfInterval, flagCount, statustr};
+                                String updateArray[] = new String[]{endTimeStr, noOfInterval, flagCount, statustr};
                                 updateSessionRecord(childrenIDStr, updateArray);
                                 //Toast.makeText(Timer_Test.this, "Update session -flag count 10- Successful!", Toast.LENGTH_SHORT).show();
                                 //
@@ -223,10 +241,10 @@ public class Timer_Test extends ActionBarActivity {
                                 // ===================== insert into interval (export)*** ========================
                                 String sessionNoStr = String.valueOf(sessionNo);
                                 //Interval newInterval = new Interval(interval.getText().toString(), engagement, physicalPrompt, adults, peers, materials, noneOther, childrenIDStr, childName, sessionNoStr, "Flagged!");
-                                Interval newInterval = new Interval( childrenIDStr, interval.getText().toString(), engagement, physicalPrompt, adults, peers, materials, noneOther,childName, sessionNoStr, "Flagged!");
+                                Interval newInterval = new Interval(childrenIDStr, interval.getText().toString(), engagement, physicalPrompt, adults, peers, materials, noneOther, childName, sessionNoStr, "Flagged!");
                                 int status = myNewGradingDB.addPersonDataInterval(newInterval);
-                                if (status == 1){
-                                   // Toast.makeText(getApplicationContext(), "interval inserted successfully", Toast.LENGTH_LONG).show();
+                                if (status == 1) {
+                                    // Toast.makeText(getApplicationContext(), "interval inserted successfully", Toast.LENGTH_LONG).show();
                                 }
                                 //
 
@@ -237,8 +255,6 @@ public class Timer_Test extends ActionBarActivity {
 
             //  if reach 15s of the interval
             if (updateTime >= fithteenSecsLimit) {
-
-                Cursor lastRowID = mySessionDB.getLastRow();
 
                 alarm.vibrate(500);
 
@@ -258,21 +274,21 @@ public class Timer_Test extends ActionBarActivity {
                     // ===================== update into child (export)*** ========================
                     String childrenIDStr = Long.toString(childID);
                     String statusUpdate = "Completed";
-                    String updateChildArray[]= new String[]{statusUpdate};
+                    String updateChildArray[] = new String[]{statusUpdate};
                     updateChildRecord(childrenIDStr, updateChildArray);
                     //
 
                     // session update
-                    mySessionDB.updateInCompleteSession(lastRowID.getInt(0), time, "Interval: 5", flag.getText().toString(), "Completed");
+                    mySessionDB.updateInCompleteSession(childID, time, "Interval: 5", flag.getText().toString(), "Completed");
                     // ===================== update into session (export)*** ========================
                     //String id_children = lastRowID.getString(0);
                     String noOfInterval = "Interval: 5";
                     String endTimeStr = time;
                     String flagCount = flag.getText().toString();
                     String statustr = "Completed";
-                    String updateArray[]= new String[]{endTimeStr, noOfInterval, flagCount, statustr};
+                    String updateArray[] = new String[]{endTimeStr, noOfInterval, flagCount, statustr};
                     updateSessionRecord(childrenIDStr, updateArray);
-                   // Toast.makeText(Timer_Test.this, "Update session -complete- status Successful!", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(Timer_Test.this, "Update session -complete- status Successful!", Toast.LENGTH_SHORT).show();
                     //
 
                     // add last interval row
@@ -291,15 +307,16 @@ public class Timer_Test extends ActionBarActivity {
 
                     // ===================== insert into interval (export)*** ========================
                     String sessionNoStr = String.valueOf(sessionNo);
-                    Interval newInterval = new Interval( childrenIDStr, "Interval: 5", engagement, physicalPrompt, adults, peers, materials, noneOther, childName, sessionNoStr, "Null");
+                    Interval newInterval = new Interval(childrenIDStr, "Interval: 5", engagement, physicalPrompt, adults, peers, materials, noneOther, childName, sessionNoStr, "Null");
                     int status = myNewGradingDB.addPersonDataInterval(newInterval);
-                    if (status == 1){
-                      //  Toast.makeText(getApplicationContext(), "interval5- inserted successfully", Toast.LENGTH_LONG).show();
+                    if (status == 1) {
+                        //  Toast.makeText(getApplicationContext(), "interval5- inserted successfully", Toast.LENGTH_LONG).show();
                     }
                     //
 
                 } else { // if haven't reach maximun interval, continue and add interval count
-                    mySessionDB.updateInCompleteSession(lastRowID.getInt(0), "SessionOnGoing", interval.getText().toString(), flag.getText().toString(), "Incomplete");
+
+                    mySessionDB.updateInCompleteSession(childID, "SessionOnGoing", interval.getText().toString(), flag.getText().toString(), "Incomplete");
 
                     // ===================== update into session (export)*** ========================
                     //String id_children = lastRowID.getString(0);
@@ -308,10 +325,9 @@ public class Timer_Test extends ActionBarActivity {
                     String endTimeStr = "SessionOnGoing";
                     String flagCount = flag.getText().toString();
                     String statustr = "Incomplete";
-                    String updateArray[]= new String[]{endTimeStr, noOfInterval, flagCount, statustr};
+                    String updateArray[] = new String[]{endTimeStr, noOfInterval, flagCount, statustr};
                     updateSessionRecord(childrenIDStr, updateArray);
-                 //   Toast.makeText(Timer_Test.this, "Update session -incomplete- status Successful!", Toast.LENGTH_SHORT).show();
-                    //
+                    //   Toast.makeText(Timer_Test.this, "Update session -incomplete- status Successful!", Toast.LENGTH_SHORT).show();
 
                     myIntervalDB.insertRow(interval.getText().toString(), engagement, physicalPrompt, adults, peers, materials, noneOther, childID, childName, sessionNo, "Null");
 
@@ -319,10 +335,9 @@ public class Timer_Test extends ActionBarActivity {
                     String sessionNoStr = String.valueOf(sessionNo);
                     Interval newInterval = new Interval(childrenIDStr, interval.getText().toString(), engagement, physicalPrompt, adults, peers, materials, noneOther, childName, sessionNoStr, "Null");
                     int status = myNewGradingDB.addPersonDataInterval(newInterval);
-                    if (status == 1){
-                    //    Toast.makeText(getApplicationContext(), "interval inserted successfully", Toast.LENGTH_LONG).show();
+                    if (status == 1) {
+                        //    Toast.makeText(getApplicationContext(), "interval inserted successfully", Toast.LENGTH_LONG).show();
                     }
-                    //
 
                     interval.setText("Interval: " + (count));
                     startTime = System.currentTimeMillis();
@@ -411,24 +426,62 @@ public class Timer_Test extends ActionBarActivity {
         childID = Long.parseLong(childId);
         final Long inID = Long.parseLong(childId);
         final Cursor cursor = myDB.getRow(inID);
+        lastRowID = mySessionDB.getLastRow();
 
         // Child Table datas
         final String idRetrieve = cursor.getString(0);
-        sessionNo = cursor.getInt(13);
         final String inspectorRetrieve = cursor.getString(6);
         final String venueRetrieve = cursor.getString(7);
+        sessionNo = cursor.getInt(13);
 
         // set text
         status.setText("Current status: " + cursor.getString(12));
         child.setText("Currently observing: " + childName);
         session.setText("Session Number: " + sessionNo);
 
+        // retrieve previous session details
+        final Cursor sessionCursor = mySessionDB.getChildSession(childId);
+        if (mySessionDB.checkExist(childId)) {
+
+            flag.setText(sessionCursor.getString(9));
+
+            String substring = "";
+            String substring2 = "";
+
+            if (sessionCursor.getString(8).length() == 11) {
+                substring = sessionCursor.getString(8).substring(10, 11);
+            }
+            else if (sessionCursor.getString(8).length() == 12) {
+                substring = sessionCursor.getString(8).substring(10, 12);
+            }
+
+            if (sessionCursor.getString(9).length() == 13) {
+                substring2 = sessionCursor.getString(9).substring(12, 13);
+            }
+            else if (sessionCursor.getString(9).length() == 14) {
+                substring2 = sessionCursor.getString(9).substring(12, 14);
+            }
+
+            int newInterval = 0;
+            if(substring.length()>0) {
+                 newInterval = (Integer.parseInt(substring) + 1);
+            }
+
+            if(substring2.length()>0) {
+                flagCount = Integer.parseInt(substring2);
+            }
+
+            intervalCount = newInterval;
+            interval.setText("Interval: " + String.valueOf(intervalCount));
+            tvStartTime.setText("Start Time: " + sessionCursor.getString(6) + " | " + sessionCursor.getString(5));
+          //  interval.setText(String.valueOf(newInterval));
+        }
         // The start button
         timeButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) { // Stop and reset interval
                         Button timeButton = (Button) v;
-                        if (timeButton.getText().equals("Pause")) {
+                        if (timeButton.getText().equals("Not in use")) { // this code portion not in use anymore
 
                             // date and time code
                             long dateInMillis = System.currentTimeMillis();
@@ -454,13 +507,13 @@ public class Timer_Test extends ActionBarActivity {
                             String endTimeStr = time;
                             String flagCount = flag.getText().toString();
                             String statustr = "Incomplete";
-                            String updateArray[]= new String[]{endTimeStr, noOfInterval, flagCount, statustr};
+                            String updateArray[] = new String[]{endTimeStr, noOfInterval, flagCount, statustr};
                             updateSessionRecord(childrenIDStr, updateArray);
-                          //  Toast.makeText(Timer_Test.this, "Update session -incomplete- Successful!", Toast.LENGTH_SHORT).show();
+                            //  Toast.makeText(Timer_Test.this, "Update session -incomplete- Successful!", Toast.LENGTH_SHORT).show();
                             //
 
                             // mySessionDB.updateRow(inID, "Completed", String.valueOf(sessionCount), "date");
-                            status.setText("  Current status: Paused");
+                            status.setText("Current status: Paused");
                             timeButton.setText("Reset");
                             //tvStartTime.setText("  Session stopped at: " + time);
                             flag.setEnabled(false);
@@ -490,9 +543,16 @@ public class Timer_Test extends ActionBarActivity {
                             // ===================== update into child (export)*** ========================
                             String childrenIDStr = Long.toString(childID);
                             String statusUpdate = "Incomplete";
-                            String updateChildArray[]= new String[]{statusUpdate};
+                            String updateChildArray[] = new String[]{statusUpdate};
                             updateChildRecord(childrenIDStr, updateChildArray);
-                            //
+
+                            tvStartTime.setText("Start Time: " + time + " | " +  date);
+                            if ( mySessionDB.checkExist(childId)) {
+                                tvStartTime.setText("Start Time: " + sessionCursor.getString(6) + " | " + sessionCursor.getString(5));
+                            }
+                            else {
+                                tvStartTime.setText("Start Time: " + time + " | " +  date);
+                            }
 
                             // create session row
                             if (mySessionDB.checkExist(childId) && CheckIfExistSession(childId)) {
@@ -503,34 +563,35 @@ public class Timer_Test extends ActionBarActivity {
                                 String endTimeStr = time;
                                 String flagCount = flag.getText().toString();
                                 String statustr = "Incomplete";
-                                String updateArray[]= new String[]{endTimeStr, noOfInterval, flagCount, statustr};
+                                String updateArray[] = new String[]{endTimeStr, noOfInterval, flagCount, statustr};
                                 updateSessionRecord(childrenIDStr, updateArray);
-                            //    Toast.makeText(Timer_Test.this, "Update session -incomplete- status Successful!", Toast.LENGTH_SHORT).show();
+                                //    Toast.makeText(Timer_Test.this, "Update session -incomplete- status Successful!", Toast.LENGTH_SHORT).show();
                                 //
 
                             } else {
                                 mySessionDB.insertRow(idRetrieve, venueRetrieve, inspectorRetrieve, String.valueOf(sessionNo),
-                                        date, time, "0", "0", "0", childName, "Incomplete");
+                                        date, time, "0", "Interval: 0", "Flag Count: 0", childName, "Incomplete");
 
                                 // ===================== insert into session (export)*** ========================
                                 Session newSession = new Session(venueRetrieve, idRetrieve, inspectorRetrieve, String.valueOf(sessionNo),
                                         date, time, "0", "0", "0", childName, "Incomplete");
                                 int status = myNewGradingDB.addPersonDataSession(newSession);
-                                if (status == 1){
-                             //       Toast.makeText(getApplicationContext(), "new session inserted successfully", Toast.LENGTH_LONG).show();
+                                if (status == 1) {
+                                    //       Toast.makeText(getApplicationContext(), "new session inserted successfully", Toast.LENGTH_LONG).show();
                                 }
                             }
+
                             status.setText("Current status: Observing");
-                            timeButton.setText("Pause");
-                            tvStartTime.setText("Start Time: " + time);
                             session.setText("Session number: " + sessionNo);
-                            interval.setText("Interval: 1");
+                            interval.setText("Interval: " + intervalCount);
+                          // timeButton.setVisibility(View.GONE);
+                          // flag.setVisibility(View.VISIBLE);
 
                         } else if (timeButton.getText().equals("Reset")) {
                             // start timer, update status and get new status
                             startTime = System.currentTimeMillis();
                             timerHandler.postDelayed(timerRunnable, 0);
-                            timeButton.setText("Pause");
+                         //   timeButton.setText("Pause");
                             status.setText("Current status: Observing");
                             flag.setEnabled(true);
                         } else if (timeButton.getText().equals("Grade")) {
@@ -581,6 +642,7 @@ public class Timer_Test extends ActionBarActivity {
                 }
         );
 
+        final Drawable d = getResources().getDrawable(R.drawable.button_selector);
         // The engagement buttons
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -588,30 +650,30 @@ public class Timer_Test extends ActionBarActivity {
                 if (v.equals(activeEn)) {
                     activeEn.setBackgroundColor(getResources().getColor(R.color.buttonPressed));
                     engagement = activeEn.getText().toString();
-                    activeNon.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
-                    passiveEn.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
-                    passiveNon.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
+                    activeNon.setBackgroundResource(R.drawable.button_selector);
+                    passiveEn.setBackgroundResource(R.drawable.button_selector);
+                    passiveNon.setBackgroundResource(R.drawable.button_selector);
                 }
                 if (v.equals(activeNon)) {
                     activeNon.setBackgroundColor(getResources().getColor(R.color.buttonPressed));
                     engagement = activeNon.getText().toString();
-                    activeEn.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
-                    passiveEn.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
-                    passiveNon.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
+                    activeEn.setBackgroundResource(R.drawable.button_selector);
+                    passiveEn.setBackgroundResource(R.drawable.button_selector);
+                    passiveNon.setBackgroundResource(R.drawable.button_selector);
                 }
                 if (v.equals(passiveEn)) {
                     passiveEn.setBackgroundColor(getResources().getColor(R.color.buttonPressed));
                     engagement = passiveEn.getText().toString();
-                    activeEn.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
-                    activeNon.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
-                    passiveNon.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
+                    activeEn.setBackgroundResource(R.drawable.button_selector);
+                    activeNon.setBackgroundResource(R.drawable.button_selector);
+                    passiveNon.setBackgroundResource(R.drawable.button_selector);
                 }
                 if (v.equals(passiveNon)) {
                     passiveNon.setBackgroundColor(getResources().getColor(R.color.buttonPressed));
                     engagement = passiveNon.getText().toString();
-                    activeEn.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
-                    passiveEn.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
-                    activeNon.setBackgroundColor(getResources().getColor(R.color.buttonNotPressed));
+                    activeEn.setBackgroundResource(R.drawable.button_selector);
+                    passiveEn.setBackgroundResource(R.drawable.button_selector);
+                    activeNon.setBackgroundResource(R.drawable.button_selector);
                 }
             }
         };
@@ -625,11 +687,11 @@ public class Timer_Test extends ActionBarActivity {
 
     public void onClick_cbPhysical(View v) {
         if (cbPhysicalPrompt.isChecked()) {
-            tbPhysicalPrompt.setVisibility(View.VISIBLE);
+            physicalPrompt = "Checked";
             cbPhysicalPrompt.setChecked(true);
         } else {
+            physicalPrompt = "null";
             cbPhysicalPrompt.setChecked(false);
-            tbPhysicalPrompt.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -678,36 +740,35 @@ public class Timer_Test extends ActionBarActivity {
 //        db.update("child", newValues ," id = '" + ChildrenID + "'", null);
 //    }
 
-    public void updateChildRecord(String ChildrenID, String updateChildArray[]){
+    public void updateChildRecord(String ChildrenID, String updateChildArray[]) {
         SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
         ContentValues newValues = new ContentValues();
         newValues.put("status", updateChildArray[0]);
-        db.update("child", newValues ," id = '" + ChildrenID + "'", null);
+        db.update("child", newValues, " id = '" + ChildrenID + "'", null);
     }
 
-    public void updateSessionRecord(String ChildrenID, String updateSessionArray[]){
+    public void updateSessionRecord(String ChildrenID, String updateSessionArray[]) {
         SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
         ContentValues newValues = new ContentValues();
         newValues.put("endTime", updateSessionArray[0]);
         newValues.put("noInterval", updateSessionArray[1]);
         newValues.put("noFlags", updateSessionArray[2]);
         newValues.put("sessionStatus", updateSessionArray[3]);
-        db.update("session", newValues ," child_Id = '" + ChildrenID + "'", null);
+        db.update("session", newValues, " child_Id = '" + ChildrenID + "'", null);
     }
 
-    public boolean CheckIfExistSession (String childid){
+    public boolean CheckIfExistSession(String childid) {
         SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
         int count = -1;
         Cursor c = null;
         try {
             String query = "SELECT COUNT(*) FROM session WHERE child_Id = ?";
-            c = db.rawQuery(query, new String[] {childid});
+            c = db.rawQuery(query, new String[]{childid});
             if (c.moveToFirst()) {
                 count = c.getInt(0);
             }
             return count > 0;
-        }
-        finally {
+        } finally {
             if (c != null) {
                 c.close();
             }

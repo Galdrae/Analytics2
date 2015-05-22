@@ -57,7 +57,7 @@ public class IntervalDBAdapter {
     public static final String DATABASE_NAME = "MyIntervalDb";
     public static final String DATABASE_TABLE = "IntervalTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
 
     private static final String DATABASE_CREATE_SQL =
             "create table " + DATABASE_TABLE
@@ -210,5 +210,10 @@ public class IntervalDBAdapter {
             // Recreate new database:
             onCreate(_db);
         }
+    }
+
+    public void truncateYKIntervalTables(){
+        db.execSQL("delete from sqlite_sequence where name='" + DATABASE_TABLE + "'");
+        db.execSQL("delete from "+ DATABASE_TABLE );
     }
 }
