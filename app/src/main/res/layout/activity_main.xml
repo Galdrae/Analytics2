@@ -174,6 +174,7 @@
                 android:layout_alignEnd="@+id/rbFemale"
                 android:onClick="onClick_Delete"
                 android:text="Delete"
+                android:visibility="gone"
                  />
 
             <Button

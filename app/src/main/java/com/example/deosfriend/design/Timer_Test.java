@@ -208,11 +208,9 @@ public class Timer_Test extends ActionBarActivity {
 
                                 // ===================== update into child (export)*** ========================
                                 String childrenIDStr = Long.toString(childID);
-                                Toast.makeText(Timer_Test.this, childId, Toast.LENGTH_SHORT).show();
                                 String statusUpdate = "Fail";
                                 String updateChildArray[] = new String[]{statusUpdate};
                                 updateChildRecord(childrenIDStr, updateChildArray);
-                                Toast.makeText(Timer_Test.this, "Can", Toast.LENGTH_SHORT).show();
                                 //
 
                                 mySessionDB.updateInCompleteSession(childID, time, interval.getText().toString(), "Flag Count: 10", "Fail");
@@ -296,7 +294,7 @@ public class Timer_Test extends ActionBarActivity {
 
                     // text changes
                     status.setText("Current status: Completed");
-                    interval.setText("Interval: " + "5" + " x 15s");
+                    interval.setText("Interval: " + (intervalCount - 1));
                     timerTextView.setText(("End of Session"));
                     tvTest.setText("");
                     tvTest.setBackgroundColor(0);
@@ -316,18 +314,9 @@ public class Timer_Test extends ActionBarActivity {
 
                 } else { // if haven't reach maximun interval, continue and add interval count
 
-                    mySessionDB.updateInCompleteSession(childID, "SessionOnGoing", interval.getText().toString(), flag.getText().toString(), "Incomplete");
-
-                    // ===================== update into session (export)*** ========================
-                    //String id_children = lastRowID.getString(0);
-                    String childrenIDStr = Long.toString(childID);
-                    String noOfInterval = interval.getText().toString();
-                    String endTimeStr = "SessionOnGoing";
-                    String flagCount = flag.getText().toString();
-                    String statustr = "Incomplete";
-                    String updateArray[] = new String[]{endTimeStr, noOfInterval, flagCount, statustr};
-                    updateSessionRecord(childrenIDStr, updateArray);
                     //   Toast.makeText(Timer_Test.this, "Update session -incomplete- status Successful!", Toast.LENGTH_SHORT).show();
+
+                    String childrenIDStr = Long.toString(childID);
 
                     myIntervalDB.insertRow(interval.getText().toString(), engagement, physicalPrompt, adults, peers, materials, noneOther, childID, childName, sessionNo, "Null");
 
@@ -352,6 +341,19 @@ public class Timer_Test extends ActionBarActivity {
                     tvTest.setText("");
 
                     alarm.vibrate(500);
+                    mySessionDB.updateInCompleteSession(childID, "SessionOnGoing", interval.getText().toString(), flag.getText().toString(), "Incomplete");
+
+
+
+                    // ===================== update into session (export)*** ========================
+                    //String id_children = lastRowID.getString(0);
+                    String noOfInterval = interval.getText().toString();
+                    String endTimeStr = "SessionOnGoing";
+                    String flagCount = flag.getText().toString();
+                    String statustr = "Incomplete";
+                    String updateArray[] = new String[]{endTimeStr, noOfInterval, flagCount, statustr};
+                    updateSessionRecord(childrenIDStr, updateArray);
+
                 }
             }
         }
@@ -464,7 +466,7 @@ public class Timer_Test extends ActionBarActivity {
 
             int newInterval = 0;
             if(substring.length()>0) {
-                 newInterval = (Integer.parseInt(substring) + 1);
+                 newInterval = (Integer.parseInt(substring) + 0);
             }
 
             if(substring2.length()>0) {
@@ -570,7 +572,7 @@ public class Timer_Test extends ActionBarActivity {
 
                             } else {
                                 mySessionDB.insertRow(idRetrieve, venueRetrieve, inspectorRetrieve, String.valueOf(sessionNo),
-                                        date, time, "0", "Interval: 0", "Flag Count: 0", childName, "Incomplete");
+                                        date, time, "0", "Interval: 1", "Flag Count: 0", childName, "Incomplete");
 
                                 // ===================== insert into session (export)*** ========================
                                 Session newSession = new Session(venueRetrieve, idRetrieve, inspectorRetrieve, String.valueOf(sessionNo),
@@ -584,14 +586,14 @@ public class Timer_Test extends ActionBarActivity {
                             status.setText("Current status: Observing");
                             session.setText("Session number: " + sessionNo);
                             interval.setText("Interval: " + intervalCount);
-                          // timeButton.setVisibility(View.GONE);
+                            timeButton.setText("In Progress");
                           // flag.setVisibility(View.VISIBLE);
 
                         } else if (timeButton.getText().equals("Reset")) {
                             // start timer, update status and get new status
                             startTime = System.currentTimeMillis();
                             timerHandler.postDelayed(timerRunnable, 0);
-                         //   timeButton.setText("Pause");
+                            timeButton.setText("In Progress");
                             status.setText("Current status: Observing");
                             flag.setEnabled(true);
                         } else if (timeButton.getText().equals("Grade")) {

@@ -79,9 +79,9 @@ public class Export_List extends ActionBarActivity {
         startManagingCursor(cursor);
 
         String[] fromFieldNames = new String[]
-                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_INSPECTOR, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS};
+                {DBAdapter.KEY_CHILDNAME, DBAdapter.KEY_INSPECTOR, DBAdapter.KEY_IMAGE, DBAdapter.KEY_STATUS, DBAdapter.KEY_SESSIONNO};
         int[] toViewIDs = new int[]
-                {R.id.tvName_Db, R.id.tvAge_Db, R.id.lv_Image, R.id.tvStatus};
+                {R.id.tvName_Db, R.id.tvAge_Db, R.id.lv_Image, R.id.tvStatus, R.id.tvSessionNo};
 
         SimpleCursorAdapter myCursorAdapter =
                 new SimpleCursorAdapter(
@@ -131,6 +131,8 @@ public class Export_List extends ActionBarActivity {
     private void exportAll(){
         ExportDatabaseCSVTask task=new ExportDatabaseCSVTask();
         task.execute();
+
+
     }
 
     private void exportDB() {
@@ -210,72 +212,76 @@ public class Export_List extends ActionBarActivity {
 
                 file.createNewFile();
                 CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
-                SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
 
-                Cursor curCSV3 = db.rawQuery("SELECT * FROM child ", null);
-                csvWrite.writeNext("Name", "Gender", "SessionNo", "Inspector", "Remarks", "Primary Diagnosis", "Secondary Diagnosis", "Activity", "No of adults", "No of children", "Session Status", "Venue");
+
+                // sqlite core query
+                SQLiteDatabase db = myNewGradingDB.getReadableDatabase();
+                //Cursor curCSV=mydb.rawQuery("select * from " + TableName_ans,null);
+
+                Cursor curCSV3 = db.rawQuery("SELECT childName, id, gender, sessionNo, inspecter, remarks, PriDi, SecDi, activity, noAdults, noChildren, status, venue FROM child ", null);
+                csvWrite.writeNext("Name", "Child_id","Gender", "SessionNo", "Inspector", "Remarks", "Primary Diagnosis", "Secondary Diagnosis", "Activity", "No of adults", "No of children", "Session Status", "Venue");
                 while (curCSV3.moveToNext()) {
                     String arrStr[] = {
-                            curCSV3.getString(3), curCSV3.getString(4),
-                            curCSV3.getString(11),curCSV3.getString(7),
-                            curCSV3.getString(10),curCSV3.getString(0),
-                            curCSV3.getString(1), curCSV3.getString(2),
+                            curCSV3.getString(0), curCSV3.getString(1),
+                            curCSV3.getString(2),curCSV3.getString(3),
+                            curCSV3.getString(4),curCSV3.getString(5),
+                            curCSV3.getString(6), curCSV3.getString(7),
                             curCSV3.getString(8), curCSV3.getString(9),
-                            curCSV3.getString(6), curCSV3.getString(5)};
+                            curCSV3.getString(10), curCSV3.getString(11),
+                            curCSV3.getString(12)};
                     csvWrite.writeNext(arrStr);
                 }
 
                 csvWrite.writeNext();
 
-                Cursor curCSV4 = db.rawQuery("SELECT * FROM interval ", null);
+                Cursor curCSV4 = db.rawQuery("SELECT childName, child_id, sessionNo, flag, engagement, interval, adults, peers, materials, noneOthers, physcial FROM interval ", null);
                 csvWrite.writeNext("Name", "Child_id", "SessionNo", "Flag", "engagement", "Interval", "Adult", "Peer", "Material", "None Other", "Physical");
                 while (curCSV4.moveToNext()) {
                     String arrStr[] = {
-                            curCSV4.getString(1), curCSV4.getString(2),
-                            curCSV4.getString(5), curCSV4.getString(4),
-                            curCSV4.getString(3), curCSV4.getString(6),
-                            curCSV4.getString(0), curCSV4.getString(9),
-                            curCSV4.getString(7), curCSV4.getString(8),
+                            curCSV4.getString(0), curCSV4.getString(1),
+                            curCSV4.getString(2), curCSV4.getString(3),
+                            curCSV4.getString(4), curCSV4.getString(5),
+                            curCSV4.getString(6), curCSV4.getString(7),
+                            curCSV4.getString(8), curCSV4.getString(9),
                             curCSV4.getString(10)};
                     csvWrite.writeNext(arrStr);
                 }
 
                 csvWrite.writeNext();
 
-                Cursor curCSV5 = db.rawQuery("SELECT * FROM session ", null);
+                Cursor curCSV5 = db.rawQuery("SELECT sessionChildName, child_Id, center_id, observer, sessionCount, sessionStatus, date, startTime, endTime, noFlags, noInterval FROM session ", null);
                 csvWrite.writeNext("Name", "Child_id", "Venue", "Inspector", "Session No", "Session Status", "Date", "Start Time", "End Time", "No of flag", "No of interval ");
                 while (curCSV5.moveToNext()) {
                     String arrStr[] = {
-                            curCSV5.getString(8), curCSV5.getString(1),
-                            curCSV5.getString(0), curCSV5.getString(7),
-                            curCSV5.getString(9), curCSV5.getString(10),
-                            curCSV5.getString(2), curCSV5.getString(4),
-                            curCSV5.getString(3), curCSV5.getString(5),
-                            curCSV5.getString(6)};
+                            curCSV5.getString(0), curCSV5.getString(1),
+                            curCSV5.getString(2), curCSV5.getString(3),
+                            curCSV5.getString(4), curCSV5.getString(5),
+                            curCSV5.getString(6), curCSV5.getString(7),
+                            curCSV5.getString(8), curCSV5.getString(9),
+                            curCSV5.getString(10)};
                     csvWrite.writeNext(arrStr);
                 }
 
                 csvWrite.writeNext();
 
-                Cursor curCSV = db.rawQuery("SELECT * FROM grade_child", null);
+                Cursor curCSV = db.rawQuery("SELECT name, child_Id, qns1, qns2, qns3, qns4, qns5 FROM grade_child ", null);
                 csvWrite.writeNext("Name", "Child_id", "Qns1", "Qns2", "Qns3", "Qns4", "Qns5");
                 while (curCSV.moveToNext()) {
                     String arrStr[] = {
-                            curCSV.getString(1), curCSV.getString(0),
-                            curCSV.getString(3),
-                            curCSV.getString(4), curCSV.getString(5),
-                            curCSV.getString(6),curCSV.getString(7)};
+                            curCSV.getString(0), curCSV.getString(1),
+                            curCSV.getString(2),
+                            curCSV.getString(3), curCSV.getString(4),
+                            curCSV.getString(5),curCSV.getString(6)};
                     csvWrite.writeNext(arrStr);
                 }
-
 
                 csvWrite.writeNext();
 
                 csvWrite.close();
                 return true;
             }
-            catch (IOException e){
-                Log.e("ListView_Database", e.getMessage(), e);
+            catch (IOException e) {
+                Log.e("Grade", e.getMessage(), e);
                 return false;
             }
         }

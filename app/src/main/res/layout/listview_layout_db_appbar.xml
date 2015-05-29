@@ -57,7 +57,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginTop="750dp"
-                android:layout_marginRight="50dp"
+                android:layout_marginRight="20dp"
                 android:layout_gravity="right"
                 android:background="@drawable/circle"
                 android:src="@drawable/iconblack" />

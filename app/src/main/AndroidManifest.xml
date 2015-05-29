@@ -42,15 +42,19 @@
             android:name=".Tabs"
             android:label="Child Details"
             android:screenOrientation="portrait" />
-        <activity android:name=".Result" />
-        <activity android:name=".Grade" />
+        <activity android:name=".Result"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Grade"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Export_List"
-            android:label="@string/title_activity_export__list" >
+            android:label="Export"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Export_Row"
-            android:label="@string/title_activity_export__row" >
+            android:label="Export"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

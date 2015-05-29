@@ -95,7 +95,6 @@ public class DBAdapter {
 	
 	// Context of application who uses us.
 	private final Context context;
-	
 	private DatabaseHelper myDBHelper;
 	private SQLiteDatabase db;
 
